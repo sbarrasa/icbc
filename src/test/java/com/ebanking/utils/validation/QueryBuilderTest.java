@@ -48,7 +48,7 @@ class QueryBuilderTest {
         (inputData) -> LocalDate.parse(inputData, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
         (request) -> QueryBuilderTest.nacimientos.get(request),
         (response) -> Objects.nonNull(response) && response.contains("Zaiper"),
-        (validator) -> new RuntimeException("El autor %s no es Zaiper".formatted(validator.getData()))
+        (validator) -> new RuntimeException("El autor %s no es Zaiper".formatted(validator.getValue()))
     );
 
     assertDoesNotThrow(()-> query.execute("07/06/1974"));

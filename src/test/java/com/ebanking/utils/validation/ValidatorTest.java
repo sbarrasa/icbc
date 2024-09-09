@@ -16,13 +16,4 @@ class ValidatorTest {
     assertDoesNotThrow(() -> validator.validate(10));
   }
 
-
-  @Test
-  void getName(){
-    var validator = new Validator<String>(Validator::nonEmpty)
-            .setName("Prueba");
-
-    assertEquals("Prueba", validator.getName());
-
-  }
 }

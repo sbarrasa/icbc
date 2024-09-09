@@ -7,8 +7,7 @@ public class Validator<T> extends AbstractValidator<T> {
   public static String defaultMessage = "%s = %s (error)";
 
   public static ValidatorExceptionHandler defaultexceptionHandler =
-          validator -> new RuntimeException(
-                  defaultMessage.formatted(validator.getName(), validator.getData()));
+          validator -> new RuntimeException(defaultMessage);
 
   public static boolean nonEmpty(String string) {
     return !Objects.isNull(string)

@@ -37,8 +37,9 @@ class QueryTemplateTest {
       @Override
       public void validate() throws Exception {
         new Validator<>(Objects::nonNull)
-                .exceptionHandler(validator -> new Exception("No hay autores nacidos con esa fecha"))
-                .validate(response());
+                .setValue(this.getResponse())
+                .exceptionHandler(validator -> new Exception("No hay autores nacidos en esa fecha"))
+                .validate();
 
       }
 

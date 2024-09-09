@@ -2,5 +2,5 @@ package com.ebanking.utils.validation;
 
 @FunctionalInterface
 public interface ValidatorExceptionHandler {
-  Exception build(AbstractValidator<?> validator);
+  Exception build(AbstractValidator<?> validable);
 }

@@ -3,22 +3,22 @@ package com.ebanking.utils.validation;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class ContainerValidator<T> extends AbstractValidator<T> {
+public class ValidatorContainer<T> extends AbstractValidator<T> {
 
-  private final List<Validable> validables = new ArrayList<>();
+  private final List<Validable<?>> validables = new ArrayList<>();
   private final List<AbstractValidator<T>> assignableValidators = new ArrayList<>();
 
-  public final List<Validable> validators() {
+  public final List<Validable<?>> validators() {
     return validables;
   }
 
 
-  public final ContainerValidator<T> add(Validable validator) {
+  public final ValidatorContainer<T> add(Validable<?> validator) {
     validables.add(validator);
     return this;
   }
 
-  public final ContainerValidator<T> add(AbstractValidator<T> validator) {
+  public final ValidatorContainer<T> add(AbstractValidator<T> validator) {
     validables.add(validator);
     assignableValidators.add(validator);
     return this;
@@ -32,9 +32,9 @@ public class ContainerValidator<T> extends AbstractValidator<T> {
 
   @Override
   public final void validate() throws Exception {
-    assignableValidators.forEach(validator -> validator.setData(this.getData()));
+    assignableValidators.forEach(validator -> validator.setValue(this.getValue()));
 
-    for (Validable validable : validables) {
+    for (Validable<?> validable : validables) {
         validable.validate();
     }
   }

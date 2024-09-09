@@ -7,31 +7,31 @@ import java.util.function.Predicate;
 public class QueryBuilder<I, RQ, RS> extends QueryTemplate<I, RQ, RS> {
   private final AbstractValidator<RS> validator;
   private final Function<I, RQ> requestBuilder;
-  private final Function<RQ, RS> responseGetter;
+  private final Function<RQ, RS> dataGetter;
 
 
   public QueryBuilder(Function<I, RQ> requestBuilder,
-                      Function<RQ, RS> responseGetter,
+                      Function<RQ, RS> dataGetter,
                       AbstractValidator<RS> validator){
 
     this.requestBuilder = requestBuilder;
-    this.responseGetter = responseGetter;
+    this.dataGetter = dataGetter;
     this.validator = validator;
   }
 
   public QueryBuilder(Function<I, RQ> requestBuilder,
-                      Function<RQ, RS> responseGetter,
+                      Function<RQ, RS> dataGetter,
                       Predicate<RS> condition){
-    this(requestBuilder, responseGetter, new Validator<>(condition));
+    this(requestBuilder, dataGetter, new Validator<>(condition));
 
   }
 
   public QueryBuilder(Function<I, RQ> requestBuilder,
-                      Function<RQ, RS> responseGetter,
+                      Function<RQ, RS> dataGetter,
                       Predicate<RS> condition,
                       ValidatorExceptionHandler exceptionHandler){
 
-    this(requestBuilder, responseGetter, condition);
+    this(requestBuilder, dataGetter, condition);
     validator.exceptionHandler(exceptionHandler);
 
   }
@@ -43,7 +43,7 @@ public class QueryBuilder<I, RQ, RS> extends QueryTemplate<I, RQ, RS> {
 
   @Override
   public final RS get(RQ request) {
-    return responseGetter.apply(request);
+    return dataGetter.apply(request);
   }
 
   public AbstractValidator<RS> validator() {
@@ -52,6 +52,6 @@ public class QueryBuilder<I, RQ, RS> extends QueryTemplate<I, RQ, RS> {
 
   @Override
   public void validate() throws Exception {
-    validator.validate(response());
+    validator.validate(getResponse());
   }
 }

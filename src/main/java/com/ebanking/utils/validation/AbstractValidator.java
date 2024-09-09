@@ -2,11 +2,9 @@ package com.ebanking.utils.validation;
 
 import java.util.function.Predicate;
 
-public abstract class AbstractValidator<T> implements Validable {
+public abstract class AbstractValidator<T> implements Validable<T> {
 
-  private T data;
-  private String name = "";
-
+  private T value ;
   private ValidatorExceptionHandler exceptionHandler ;
 
   public AbstractValidator(){}
@@ -24,32 +22,23 @@ public abstract class AbstractValidator<T> implements Validable {
     return this;
   }
 
-  public final T getData(){
-    return data;
+  public final T getValue(){
+    return value;
   }
 
-  public final AbstractValidator<T> setData(T data){
-    this.data = data;
-    return this;
-  }
-
-  public final String getName(){
-    return name;
-  }
-
-  public final AbstractValidator<T> setName(String name){
-    this.name = name;
+  public final AbstractValidator<T> setValue(T value){
+    this.value = value;
     return this;
   }
 
 
-  public final void validate(T data) throws Exception {
-    setData(data);
+  public final void validate(T value) throws Exception {
+    setValue(value);
     validate();
   }
   @Override
   public void validate() throws Exception {
-    if (!getCondition().test(data))
+    if (!getCondition().test(value))
       throw buildException();
   }
 

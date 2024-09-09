@@ -20,10 +20,10 @@ class AbstractValidatorTest {
 
     assertThrows(RuntimeException.class, () -> validator.validate(2));
 
-    validator.setData(1);
+    validator.setValue(1);
     assertDoesNotThrow(() -> validator.validate());
 
-    validator.setData(3);
+    validator.setValue(3);
     assertThrows(RuntimeException.class, validator::validate);
 
   }
@@ -35,7 +35,8 @@ class AbstractValidatorTest {
 
       @Override
       protected ValidatorExceptionHandler exceptionHandler(){
-        return (validator) -> new RuntimeException("%s es %s pero debe ser 1".formatted(getName(), getData()));
+        return (validator) -> new RuntimeException("%s no es 1".formatted(
+                validator.getValue()));
       }
       @Override
       public Predicate<Integer> getCondition() {
@@ -43,8 +44,6 @@ class AbstractValidatorTest {
       }
 
     };
-
-    validator.setName("número");
     assertThrows(RuntimeException.class, () -> validator.validate(2));
   }
 
@@ -55,7 +54,7 @@ class AbstractValidatorTest {
 
       @Override
       protected Exception buildException(){
-        return new RuntimeException("%s no es igual a 1".formatted(getData()));
+        return new RuntimeException("%s no es igual a 1".formatted(getValue()));
       }
 
       @Override

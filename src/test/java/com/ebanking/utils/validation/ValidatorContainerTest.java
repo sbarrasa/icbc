@@ -6,10 +6,10 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ContainerValidatorTest {
+class ValidatorContainerTest {
   Validator<Integer> indexValidator = new Validator<>(data -> data == 10 );
 
-  ContainerValidator<String> validator = new ContainerValidator<String>()
+  ValidatorContainer<String> validator = new ValidatorContainer<String>()
           .add(new Validator<>(Objects::nonNull))
           .add(new Validator<>(Validator::nonEmpty))
           .add(new Validator<>(object -> object.equals("Hola mundo")))
@@ -18,25 +18,25 @@ class ContainerValidatorTest {
 
   @Test
   void validateOk() {
-    indexValidator.setData(10);
-    validator.setData("Hola mundo");
+    indexValidator.setValue(10);
+    validator.setValue("Hola mundo");
 
     assertDoesNotThrow(() -> validator.validate());
   }
 
   @Test
   void validateErr() {
-    indexValidator.setData(2);
-    validator.setData("Hola mundo");
+    indexValidator.setValue(2);
+    validator.setValue("Hola mundo");
     assertThrows(RuntimeException.class, () -> validator.validate());
 
-    validator.setData(null);
+    validator.setValue(null);
     assertThrows(RuntimeException.class, () -> validator.validate());
 
-    validator.setData("    ");
+    validator.setValue("    ");
     assertThrows(RuntimeException.class, () -> validator.validate());
 
-    validator.setData("Hola");
+    validator.setValue("Hola");
     assertThrows(RuntimeException.class, () -> validator.validate());
   }
 
