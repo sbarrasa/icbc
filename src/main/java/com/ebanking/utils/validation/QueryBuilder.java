@@ -29,12 +29,10 @@ public class QueryBuilder<D, RQ, RS> extends QueryTemplate<D, RQ, RS> {
   public QueryBuilder(Function<D, RQ> requestBuilder,
                       Function<RQ, RS> responseGetter,
                       Predicate<RS> condition,
-                      Function<String, ? extends Exception> exceptionFunction){
+                      ValidatorExceptionFunction exceptionFunction){
 
     this(requestBuilder, responseGetter, condition);
-    ((Validator<RS>)validator)
-            .exceptionFunction(exceptionFunction)
-            .messageBuilder(() -> "%s -> %s (err)".formatted(getInputData(), getData()));
+    validator.exceptionFunction(exceptionFunction);
 
   }
 

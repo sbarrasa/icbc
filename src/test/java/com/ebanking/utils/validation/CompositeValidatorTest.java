@@ -29,10 +29,10 @@ class CompositeValidatorTest {
 
   @Test
   void validateErr() {
-    assertThrows(ValidatorException.class, () -> validator.validate(null));
+    assertThrows(RuntimeException.class, () -> validator.validate(null));
     assertEquals(Validator.class, validator.getValidatorFail().getClass());
-    assertThrows(ValidatorException.class, () -> validator.validate("   "));
-    assertThrows(ValidatorException.class, () -> validator.validate("Hola"));
+    assertThrows(RuntimeException.class, () -> validator.validate("   "));
+    assertThrows(RuntimeException.class, () -> validator.validate("Hola"));
   }
 
   @Test

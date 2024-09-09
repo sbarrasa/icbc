@@ -12,7 +12,7 @@ class NotNullValidatorTest {
     var validator = new Validator<>(Objects::nonNull);
 
     assertDoesNotThrow(() -> validator.validate("Hola"));
-    assertThrows(ValidatorException.class, () -> validator.validate(null));
+    assertThrows(RuntimeException.class, () -> validator.validate(null));
   }
 
 }

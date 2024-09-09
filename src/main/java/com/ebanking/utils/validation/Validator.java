@@ -1,19 +1,21 @@
 package com.ebanking.utils.validation;
 
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class Validator<T> extends AbstractValidator<T> {
+  public static String defaultMessage = "%s = %s (error)";
+
+  public static ValidatorExceptionFunction defaultExceptionFunction =
+          validator -> new RuntimeException(
+                  defaultMessage.formatted(validator.getName(), validator.getData()));
+
   public static boolean nonEmpty(String string) {
     return !Objects.isNull(string)
             && !string.trim().isEmpty();
   }
 
   private final Predicate<T> condition;
-
-  private Supplier<String> messageBuilder;
 
   public Validator(Predicate<T> condition) {
     this.condition = condition;
@@ -24,20 +26,4 @@ public class Validator<T> extends AbstractValidator<T> {
     return this.condition;
   }
 
-  public Validator<T> messageBuilder(Supplier<String> messageBuilder) {
-    this.messageBuilder = messageBuilder;
-    return this;
-  }
-
-  public Supplier<String> messageBuilder() {
-    if (messageBuilder == null)
-      messageBuilder = super.messageBuilder();
-
-    return messageBuilder;
-  }
-
-  public Validator<T> exceptionFunction(Function<String, ? extends Exception> exceptionFunction) {
-    super.exceptionFunction(exceptionFunction);
-    return this;
-  }
 }

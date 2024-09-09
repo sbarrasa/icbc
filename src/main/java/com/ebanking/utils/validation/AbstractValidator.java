@@ -1,30 +1,26 @@
 package com.ebanking.utils.validation;
 
-import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public abstract class AbstractValidator<T> implements Validable {
+
   private T data;
   private String name = "";
 
-  private Function<String, ? extends Exception> exceptionFunction ;
+  private ValidatorExceptionFunction exceptionFunction ;
   public AbstractValidator(){}
 
-  protected Function<String, ? extends Exception> exceptionFunction(){
+
+  protected ValidatorExceptionFunction exceptionFunction(){
     if(exceptionFunction == null)
-      exceptionFunction = ValidatorException::new;
+      exceptionFunction = Validator.defaultExceptionFunction;
 
     return this.exceptionFunction;
   }
 
-  public AbstractValidator<T> exceptionFunction(Function<String, ? extends Exception> exceptionFunction){
+  public AbstractValidator<T> exceptionFunction(ValidatorExceptionFunction exceptionFunction){
     this.exceptionFunction = exceptionFunction;
     return this;
-  }
-
-  protected Supplier<String> messageBuilder() {
-    return () -> "error de validación (%s)".formatted(getName());
   }
 
   public final T getData(){
@@ -46,7 +42,7 @@ public abstract class AbstractValidator<T> implements Validable {
 
   protected abstract Predicate<T> getCondition();
   protected Exception buildException(){
-    return exceptionFunction().apply(messageBuilder().get());
+    return exceptionFunction().apply(this);
   }
 
   public final void validate(T data) throws Exception {

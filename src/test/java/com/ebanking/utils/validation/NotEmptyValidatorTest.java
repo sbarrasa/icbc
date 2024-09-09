@@ -10,9 +10,9 @@ class NotEmptyValidatorTest {
     var validator = new Validator<String>(Validator::nonEmpty);
 
     assertDoesNotThrow(() -> validator.validate("Hola"));
-    assertThrows(ValidatorException.class, () -> validator.validate(""));
-    assertThrows(ValidatorException.class, () -> validator.validate("  "));
-    assertThrows(ValidatorException.class, () -> validator.validate(null));
+    assertThrows(RuntimeException.class, () -> validator.validate(""));
+    assertThrows(RuntimeException.class, () -> validator.validate("  "));
+    assertThrows(RuntimeException.class, () -> validator.validate(null));
 
   }
 

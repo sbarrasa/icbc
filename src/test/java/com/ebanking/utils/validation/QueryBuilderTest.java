@@ -36,7 +36,7 @@ class QueryBuilderTest {
           validator);
 
     assertEquals("Julio Florencio Cortazar", Query.execute("26/08/1914"));
-    assertThrows(ValidatorException.class, ()-> Query.execute("01/01/2024"));
+    assertThrows(RuntimeException.class, ()-> Query.execute("01/01/2024"));
 
   }
 
@@ -51,7 +51,7 @@ class QueryBuilderTest {
            new Validator<>(Objects::nonNull));
 
     assertEquals("Julio Florencio Cortazar", Query.execute("26/08/1914"));
-    assertThrows(ValidatorException.class, ()-> Query.execute("01/01/2024"));
+    assertThrows(RuntimeException.class, ()-> Query.execute("01/01/2024"));
 
   }
 
@@ -66,7 +66,7 @@ class QueryBuilderTest {
             Objects::nonNull);
 
     assertEquals("Julio Florencio Cortazar", Query.execute("26/08/1914"));
-    assertThrows(ValidatorException.class, ()-> Query.execute("01/01/2024"));
+    assertThrows(RuntimeException.class, ()-> Query.execute("01/01/2024"));
   }
 
   @Test
@@ -79,12 +79,12 @@ class QueryBuilderTest {
         },
         (request) -> QueryBuilderTest.nacimientos.get(request),
         (response) -> Objects.nonNull(response) && response.contains("Zaiper"),
-        RuntimeException::new);
+        (validator) -> new RuntimeException("El autor %s no es Zaiper".formatted(validator.getData()))
+    );
 
     assertDoesNotThrow(()-> Query.execute("07/06/1974"));
     var ex = assertThrows(RuntimeException.class, ()-> Query.execute("01/01/2024"));
-    ex = assertThrows(RuntimeException.class, ()-> Query.execute("17/08/1891"));
-    assertEquals(Query.validator().messageBuilder().get(), ex.getMessage());
+    assertThrows(RuntimeException.class, ()-> Query.execute("17/08/1891"));
   }
 
 }
