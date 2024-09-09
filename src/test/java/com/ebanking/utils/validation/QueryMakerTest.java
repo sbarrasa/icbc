@@ -10,7 +10,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class QueryBuilderTest {
+class QueryMakerTest {
     static Map<LocalDate, String> nacimientos = Map.of(
             LocalDate.of(1974, 6, 7), "Sebastián 'Zaiper' Barrasa",
             LocalDate.of(1914, 8, 26), "Julio Florencio Cortazar",
@@ -19,9 +19,9 @@ class QueryBuilderTest {
     @Test
   void executeWithValidator() throws Exception {
 
-    var query = new QueryBuilder<String, LocalDate, String>(
+    var query = new QueryMaker<String, LocalDate, String>(
           (inputData) -> LocalDate.parse(inputData, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-          QueryBuilderTest.nacimientos::get,
+          QueryMakerTest.nacimientos::get,
           new Validator<>(Objects::nonNull));
 
     assertEquals("Julio Florencio Cortazar", query.execute("26/08/1914"));
@@ -32,9 +32,9 @@ class QueryBuilderTest {
 
   @Test
   void executeWithCondition() throws Exception {
-    var query = new QueryBuilder<String, LocalDate, String>(
+    var query = new QueryMaker<String, LocalDate, String>(
             (inputData) -> LocalDate.parse(inputData, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-            (request) -> QueryBuilderTest.nacimientos.get(request),
+            (request) -> QueryMakerTest.nacimientos.get(request),
             Objects::nonNull);
 
     assertEquals("Julio Florencio Cortazar", query.execute("26/08/1914"));
@@ -44,9 +44,9 @@ class QueryBuilderTest {
   @Test
   void executeWithException()  {
 
-    var query = new QueryBuilder<String, LocalDate, String>(
+    var query = new QueryMaker<String, LocalDate, String>(
         (inputData) -> LocalDate.parse(inputData, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-        (request) -> QueryBuilderTest.nacimientos.get(request),
+        (request) -> QueryMakerTest.nacimientos.get(request),
         (response) -> Objects.nonNull(response) && response.contains("Zaiper"),
         (validator) -> new RuntimeException("El autor %s no es Zaiper".formatted(validator.getValue()))
     );
