@@ -25,9 +25,10 @@ public class CompositeValidator<T> extends AbstractValidator<T> {
   }
 
   @Override
-  public Predicate<T> getCondition() {
+  protected final Predicate<T> getCondition() {
     return null;
   }
+
 
   @Override
   public final void validate() throws Exception {

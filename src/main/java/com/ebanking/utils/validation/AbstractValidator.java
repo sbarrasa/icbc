@@ -45,7 +45,10 @@ public abstract class AbstractValidator<T> implements Validable {
     return this;
   }
 
-  public abstract Predicate<T> getCondition();
+  protected abstract Predicate<T> getCondition();
+  protected Exception buildException(){
+    return exceptionFunction().apply(messageBuilder().get());
+  }
 
   public final void validate(T data) throws Exception {
     setData(data);
@@ -54,7 +57,7 @@ public abstract class AbstractValidator<T> implements Validable {
   @Override
   public void validate() throws Exception {
     if (!getCondition().test(data))
-      throw exceptionFunction().apply(messageBuilder().get());
+      throw buildException();
   }
 
   public void assign(AbstractValidator<T> other) {
