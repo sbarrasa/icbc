@@ -1,7 +1,6 @@
 package com.ebanking.utils.validation;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 public class ValidatorContainer<T> extends AbstractValidator<T> {
 
@@ -23,12 +22,6 @@ public class ValidatorContainer<T> extends AbstractValidator<T> {
     assignableValidators.add(validator);
     return this;
   }
-
-  @Override
-  protected final Predicate<T> getCondition() {
-    return null;
-  }
-
 
   @Override
   public final void validate() throws Exception {

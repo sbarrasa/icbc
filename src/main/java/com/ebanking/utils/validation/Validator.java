@@ -20,9 +20,10 @@ public class Validator<T> extends AbstractValidator<T> {
     this.condition = condition;
   }
 
-  @Override
-  protected Predicate<T> getCondition() {
-    return this.condition;
+  public void validate() throws Exception {
+    if (!condition.test(getValue()))
+      throw exceptionHandler().build(this);
   }
+
 
 }

@@ -1,6 +1,5 @@
 package com.ebanking.utils.validation;
 
-import java.util.function.Predicate;
 
 public abstract class AbstractValidator<T> implements Validable<T> {
 
@@ -32,21 +31,13 @@ public abstract class AbstractValidator<T> implements Validable<T> {
   }
 
 
-  public final void validate(T value) throws Exception {
-    setValue(value);
-    validate();
-  }
-  @Override
-  public void validate() throws Exception {
-    if (!getCondition().test(value))
-      throw buildException();
-  }
-
-  protected abstract Predicate<T> getCondition();
-
   protected Exception buildException(){
     return exceptionHandler().build(this);
   }
 
+  public void validate(T value) throws Exception {
+    setValue(value);
+    validate();
+  }
 
 }

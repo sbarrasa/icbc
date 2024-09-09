@@ -2,15 +2,16 @@ package com.ebanking.utils.validation;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.function.Predicate;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AbstractValidatorTest {
   private static class OneValidator extends AbstractValidator<Integer> {
     @Override
-    public Predicate<Integer> getCondition() {
-      return numero -> numero == 1;
+    public void validate() throws Exception {
+      if(Objects.isNull(getValue()))
+        throw new Exception("El dato no puede ser nulo");
     }
   }
 
@@ -18,13 +19,10 @@ class AbstractValidatorTest {
   void validate()  {
     var validator = new OneValidator();
 
-    assertThrows(RuntimeException.class, () -> validator.validate(2));
+    assertThrows(Exception.class, () -> validator.validate(null));
 
     validator.setValue(1);
     assertDoesNotThrow(() -> validator.validate());
-
-    validator.setValue(3);
-    assertThrows(RuntimeException.class, validator::validate);
 
   }
 
@@ -39,8 +37,9 @@ class AbstractValidatorTest {
                 validator.getValue()));
       }
       @Override
-      public Predicate<Integer> getCondition() {
-        return object -> object == 1;
+      public void validate() {
+        if(getValue() != 1)
+          throw new RuntimeException("El dato debe ser 1");
       }
 
     };
@@ -58,8 +57,9 @@ class AbstractValidatorTest {
       }
 
       @Override
-      public Predicate<Integer> getCondition() {
-        return object -> object == 1;
+      public void validate() throws Exception {
+        if(getValue() != 1)
+          throw buildException();
       }
 
     };
