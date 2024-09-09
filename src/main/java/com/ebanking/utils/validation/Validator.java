@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 public class Validator<T> extends AbstractValidator<T> {
   public static String defaultMessage = "%s = %s (error)";
 
-  public static ValidatorExceptionFunction defaultExceptionFunction =
+  public static ValidatorExceptionHandler defaultexceptionHandler =
           validator -> new RuntimeException(
                   defaultMessage.formatted(validator.getName(), validator.getData()));
 

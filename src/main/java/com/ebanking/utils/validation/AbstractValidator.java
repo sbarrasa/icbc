@@ -7,25 +7,27 @@ public abstract class AbstractValidator<T> implements Validable {
   private T data;
   private String name = "";
 
-  private ValidatorExceptionFunction exceptionFunction ;
+  private ValidatorExceptionHandler exceptionHandler ;
+
   public AbstractValidator(){}
 
 
-  protected ValidatorExceptionFunction exceptionFunction(){
-    if(exceptionFunction == null)
-      exceptionFunction = Validator.defaultExceptionFunction;
+  protected ValidatorExceptionHandler exceptionHandler(){
+    if(exceptionHandler == null)
+      exceptionHandler = Validator.defaultexceptionHandler;
 
-    return this.exceptionFunction;
+    return this.exceptionHandler;
   }
 
-  public AbstractValidator<T> exceptionFunction(ValidatorExceptionFunction exceptionFunction){
-    this.exceptionFunction = exceptionFunction;
+  public AbstractValidator<T> exceptionHandler(ValidatorExceptionHandler exceptionHandler){
+    this.exceptionHandler = exceptionHandler;
     return this;
   }
 
   public final T getData(){
     return data;
   }
+
   public final AbstractValidator<T> setData(T data){
     this.data = data;
     return this;
@@ -40,10 +42,6 @@ public abstract class AbstractValidator<T> implements Validable {
     return this;
   }
 
-  protected abstract Predicate<T> getCondition();
-  protected Exception buildException(){
-    return exceptionFunction().apply(this);
-  }
 
   public final void validate(T data) throws Exception {
     setData(data);
@@ -55,9 +53,11 @@ public abstract class AbstractValidator<T> implements Validable {
       throw buildException();
   }
 
-  public void assign(AbstractValidator<T> other) {
-    this.exceptionFunction(other.exceptionFunction());
-    this.setName(other.getName());
-    this.setData(other.getData());
+  protected abstract Predicate<T> getCondition();
+
+  protected Exception buildException(){
+    return exceptionHandler().build(this);
   }
+
+
 }

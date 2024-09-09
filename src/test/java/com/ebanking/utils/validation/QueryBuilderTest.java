@@ -6,85 +6,54 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 class QueryBuilderTest {
-  static Map<LocalDate, String> nacimientos = Map.of(
-          LocalDate.of(1974, 6, 7), "Sebastián 'Zaiper' Barrasa",
-          LocalDate.of(1914, 8, 26), "Julio Florencio Cortazar",
-          LocalDate.of(1891, 8, 17), "Oliverio Girondo");
+    static Map<LocalDate, String> nacimientos = Map.of(
+            LocalDate.of(1974, 6, 7), "Sebastián 'Zaiper' Barrasa",
+            LocalDate.of(1914, 8, 26), "Julio Florencio Cortazar",
+            LocalDate.of(1891, 8, 17), "Oliverio Girondo");
 
-  @Test
-  void executeWithValidable() throws Exception {
-
-    var validator =  new AbstractValidator<String>() {
-      @Override
-      public Predicate<String> getCondition() {
-        return Objects::nonNull;
-      }
-    };
-
-    var Query = new QueryBuilder<String, LocalDate, String>(
-          (inputData) -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            return LocalDate.parse(inputData, formatter);
-            },
-          nacimientos::get,
-          validator);
-
-    assertEquals("Julio Florencio Cortazar", Query.execute("26/08/1914"));
-    assertThrows(RuntimeException.class, ()-> Query.execute("01/01/2024"));
-
-  }
-
-  @Test
+    @Test
   void executeWithValidator() throws Exception {
-   var Query = new QueryBuilder<String, LocalDate, String>(
-           (inputData) -> {
-             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-             return LocalDate.parse(inputData, formatter);
-           },
-           (request) -> QueryBuilderTest.nacimientos.get(request),
-           new Validator<>(Objects::nonNull));
 
-    assertEquals("Julio Florencio Cortazar", Query.execute("26/08/1914"));
-    assertThrows(RuntimeException.class, ()-> Query.execute("01/01/2024"));
+    var query = new QueryBuilder<String, LocalDate, String>(
+          (inputData) -> LocalDate.parse(inputData, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+          QueryBuilderTest.nacimientos::get,
+          new Validator<>(Objects::nonNull));
+
+    assertEquals("Julio Florencio Cortazar", query.execute("26/08/1914"));
+    assertThrows(RuntimeException.class, ()-> query.execute("01/01/2024"));
 
   }
+
 
   @Test
   void executeWithCondition() throws Exception {
-    var Query = new QueryBuilder<String, LocalDate, String>(
-            (inputData) -> {
-              DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-              return LocalDate.parse(inputData, formatter);
-            },
+    var query = new QueryBuilder<String, LocalDate, String>(
+            (inputData) -> LocalDate.parse(inputData, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
             (request) -> QueryBuilderTest.nacimientos.get(request),
             Objects::nonNull);
 
-    assertEquals("Julio Florencio Cortazar", Query.execute("26/08/1914"));
-    assertThrows(RuntimeException.class, ()-> Query.execute("01/01/2024"));
+    assertEquals("Julio Florencio Cortazar", query.execute("26/08/1914"));
+    assertThrows(RuntimeException.class, ()-> query.execute("01/01/2024"));
   }
 
   @Test
   void executeWithException()  {
 
-    var Query = new QueryBuilder<String, LocalDate, String>(
-        (inputData) -> {
-          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-          return LocalDate.parse(inputData, formatter);
-        },
+    var query = new QueryBuilder<String, LocalDate, String>(
+        (inputData) -> LocalDate.parse(inputData, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
         (request) -> QueryBuilderTest.nacimientos.get(request),
         (response) -> Objects.nonNull(response) && response.contains("Zaiper"),
         (validator) -> new RuntimeException("El autor %s no es Zaiper".formatted(validator.getData()))
     );
 
-    assertDoesNotThrow(()-> Query.execute("07/06/1974"));
-    var ex = assertThrows(RuntimeException.class, ()-> Query.execute("01/01/2024"));
-    assertThrows(RuntimeException.class, ()-> Query.execute("17/08/1891"));
+    assertDoesNotThrow(()-> query.execute("07/06/1974"));
+    assertThrows(RuntimeException.class, ()-> query.execute("01/01/2024"));
+    assertThrows(RuntimeException.class, ()-> query.execute("17/08/1891"));
   }
 
 }

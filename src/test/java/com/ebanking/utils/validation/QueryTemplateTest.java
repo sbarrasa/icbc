@@ -4,12 +4,19 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class QueryTemplateTest {
+  static Map<LocalDate, String> nacimientos = Map.of(
+          LocalDate.of(1891, 8, 17), "Oliverio Girondo",
+          LocalDate.of(1914, 8, 26), "Julio Florencio Cortazar",
+          LocalDate.of(1974, 6, 7), "Sebastián 'Zaiper' Barrasa");
+
 
   @Test
   void execute() throws Exception {
@@ -24,19 +31,21 @@ class QueryTemplateTest {
 
       @Override
       public String get(LocalDate request) {
-        return QueryBuilderTest.nacimientos.get(request);
+        return nacimientos.get(request);
       }
 
       @Override
-      public void validate()  {
-        if(getData() == null)
-          throw new RuntimeException("No hay autores nacidos con esa fecha");
+      public void validate() throws Exception {
+        new Validator<>(Objects::nonNull)
+                .exceptionHandler(validator -> new Exception("No hay autores nacidos con esa fecha"))
+                .validate(response());
+
       }
 
     };
 
+    assertThrows(Exception.class, ()-> query.execute("01/01/2024"));
     assertEquals("Julio Florencio Cortazar", query.execute("26/08/1914"));
-    assertThrows(RuntimeException.class, ()-> query.execute("01/01/2024"));
 
   }
 

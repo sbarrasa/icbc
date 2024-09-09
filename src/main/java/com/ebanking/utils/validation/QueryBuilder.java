@@ -29,10 +29,10 @@ public class QueryBuilder<D, RQ, RS> extends QueryTemplate<D, RQ, RS> {
   public QueryBuilder(Function<D, RQ> requestBuilder,
                       Function<RQ, RS> responseGetter,
                       Predicate<RS> condition,
-                      ValidatorExceptionFunction exceptionFunction){
+                      ValidatorExceptionHandler exceptionHandler){
 
     this(requestBuilder, responseGetter, condition);
-    validator.exceptionFunction(exceptionFunction);
+    validator.exceptionHandler(exceptionHandler);
 
   }
 
@@ -53,6 +53,6 @@ public class QueryBuilder<D, RQ, RS> extends QueryTemplate<D, RQ, RS> {
 
   @Override
   public void validate() throws Exception {
-    validator.validate(getData());
+    validator.validate(response());
   }
 }
