@@ -1,6 +1,7 @@
 package com.ebanking.utils.validation;
 
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -19,20 +20,24 @@ public class Validator<T> extends AbstractValidator<T> {
   }
 
   @Override
-  public Predicate<T> getCondition() {
+  protected Predicate<T> getCondition() {
     return this.condition;
   }
 
-  public Validator<T> messageBuilder(Supplier<String> messageBuilder){
+  public Validator<T> messageBuilder(Supplier<String> messageBuilder) {
     this.messageBuilder = messageBuilder;
     return this;
   }
 
   public Supplier<String> messageBuilder() {
-    if (messageBuilder == null )
+    if (messageBuilder == null)
       messageBuilder = super.messageBuilder();
 
     return messageBuilder;
   }
 
+  public Validator<T> exceptionFunction(Function<String, ? extends Exception> exceptionFunction) {
+    super.exceptionFunction(exceptionFunction);
+    return this;
+  }
 }

@@ -9,9 +9,9 @@ public abstract class AbstractValidator<T> implements Validable {
   private String name = "";
 
   private Function<String, ? extends Exception> exceptionFunction ;
+  public AbstractValidator(){}
 
-
-  public Function<String, ? extends Exception> exceptionFunction(){
+  protected Function<String, ? extends Exception> exceptionFunction(){
     if(exceptionFunction == null)
       exceptionFunction = ValidatorException::new;
 
@@ -22,9 +22,8 @@ public abstract class AbstractValidator<T> implements Validable {
     this.exceptionFunction = exceptionFunction;
     return this;
   }
-  public AbstractValidator(){}
 
-  public Supplier<String> messageBuilder() {
+  protected Supplier<String> messageBuilder() {
     return () -> "error de validación (%s)".formatted(getName());
   }
 

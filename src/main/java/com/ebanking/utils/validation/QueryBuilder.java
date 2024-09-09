@@ -33,8 +33,9 @@ public class QueryBuilder<D, RQ, RS> extends QueryTemplate<D, RQ, RS> {
 
     this(requestBuilder, responseGetter, condition);
     ((Validator<RS>)validator)
-            .messageBuilder(() -> "%s -> %s (err)".formatted(getInputData(), getData()))
-            .exceptionFunction(exceptionFunction);
+            .exceptionFunction(exceptionFunction)
+            .messageBuilder(() -> "%s -> %s (err)".formatted(getInputData(), getData()));
+
   }
 
   @Override
