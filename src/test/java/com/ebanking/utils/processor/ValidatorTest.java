@@ -1,4 +1,4 @@
-package com.ebanking.utils.validation;
+package com.ebanking.utils.processor;
 
 import org.junit.jupiter.api.Test;
 
@@ -39,6 +39,17 @@ class ValidatorTest {
     assertThrows(RuntimeException.class, () -> validator.validate(""));
     var ex = assertThrows(RuntimeException.class, () -> validator.validate("Chau"));
     assertEquals(mensaje.formatted("Chau"), ex.getMessage());
+
+  }
+
+  @Test
+  void notEmpty(){
+    Validator<String> validator = Validator.build(Validator::nonEmpty);
+
+    assertThrows(Exception.class, () -> validator.validate(""));
+    assertThrows(Exception.class, () -> validator.validate(" "));
+    assertThrows(Exception.class, () -> validator.validate(null));
+    assertDoesNotThrow(() -> validator.validate("Hola mundo"));
 
   }
 

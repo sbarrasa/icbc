@@ -1,4 +1,4 @@
-package com.ebanking.utils.validation;
+package com.ebanking.utils.processor;
 
 import org.junit.jupiter.api.Test;
 

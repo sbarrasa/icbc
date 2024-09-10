@@ -1,4 +1,4 @@
-package com.ebanking.utils.validation;
+package com.ebanking.utils.processor;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -83,7 +83,7 @@ public abstract class Validator<I> implements Validable<I> {
     }
   }
 
-  public static <I> Builder<I> builder() {
+  static <I> Builder<I> builder() {
     return new Builder<>();
   }
 
