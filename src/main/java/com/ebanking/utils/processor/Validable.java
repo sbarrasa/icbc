@@ -3,6 +3,7 @@ package com.ebanking.utils.processor;
 
 import java.util.function.Function;
 
+@FunctionalInterface
 public interface Validable<I> extends Function<I, I> {
   void validate(I value) throws Exception;
 

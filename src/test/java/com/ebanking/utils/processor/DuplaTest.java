@@ -16,4 +16,11 @@ class DuplaTest {
         assertEquals(nombre, nombres.getRight());
 
     }
+
+    @Test
+    void property(){
+        Dupla<String, Integer> property = Dupla.of("Cantidad", 10);
+
+        assertEquals(10, property.getRight());
+    }
 }

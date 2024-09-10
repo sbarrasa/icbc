@@ -2,6 +2,7 @@ package com.ebanking.utils.processor;
 
 import java.util.function.Function;
 
+@FunctionalInterface
 public interface Service<I, O> extends Function<I,O> {
     O get(I input);
 
