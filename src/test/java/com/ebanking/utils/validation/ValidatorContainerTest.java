@@ -19,9 +19,9 @@ class ValidatorContainerTest {
 
   @Test
   void validateErr() {
-    assertThrows(RuntimeException.class, () -> validator.validate(null));
-    assertThrows(RuntimeException.class, () -> validator.validate("   "));
-    assertThrows(RuntimeException.class, () -> validator.validate("Chau"));
+    assertThrows(Exception.class, () -> validator.validate(null));
+    assertThrows(Exception.class, () -> validator.validate("   "));
+    assertThrows(Exception.class, () -> validator.validate("Chau"));
   }
 
 

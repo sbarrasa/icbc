@@ -4,10 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Predicate;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,32 +16,25 @@ class ProcessorTest {
             LocalDate.of(1914, 8, 26), "Julio Florencio Cortazar",
             LocalDate.of(1891, 8, 17), "Oliverio Girondo");
 
-    @Test
-    void executeWithPredicate() throws Exception {
-        var processor = new Processor<String, LocalDate, String>(
-                input -> LocalDate.parse(input, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                nacimientos::get,
-                Objects::nonNull
-        );
-
-        assertTrue(processor.execute("07/06/1974").contains("Zaiper"));
-        assertDoesNotThrow(() -> processor.execute("26/08/1914"));
-        assertThrows(RuntimeException.class, () -> processor.execute("01/01/1920"));
-    }
 
     @Test
-    void executeWithValidator() throws Exception {
-        var processor = new Processor<String, LocalDate, String>(
-                input -> LocalDate.parse(input, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                nacimientos::get,
-                new Validator<String>(value -> Objects.isNull(value)
-                                             || value.contains("Zaiper"))
-                        .exceptionHandler(value -> new Exception("%s no es Zaiper".formatted(value)))
-        );
+    void pipeline()  {
+        Function<String, String> pipeline = Function.<String>identity()
+                .andThen(input -> LocalDate.parse(input, DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .andThen(nacimientos::get)
+                .andThen(new Validator<String>(
+                        value -> Objects.isNull(value)
+                        || value.contains("Zaiper"))
+                .andThen(fullname -> fullname.substring(0, 10))
+                .andThen(String::trim));
 
-        assertDoesNotThrow(() -> processor.execute("07/06/1974"));
-        var ex = assertThrows(Exception.class, () -> processor.execute("26/08/1914"));
+
+        assertEquals("Sebastián", pipeline.apply("07/06/1974"));
+        assertDoesNotThrow(() -> pipeline.apply("07/06/1974"));
+        var ex = assertThrows(Exception.class, () -> pipeline.apply("26/08/1914"));
         assertTrue(ex.getMessage().contains("Cortazar"));
     }
+
+
 
 }
