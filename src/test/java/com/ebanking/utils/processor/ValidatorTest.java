@@ -53,5 +53,21 @@ class ValidatorTest {
 
   }
 
+  @Test
+  void changeExceptionDefault(){
+
+    var validator = Validator.build(Objects::nonNull);
+    assertThrows(Exception.class, () -> validator.validate(null));
+
+    var message = "%s es inválido";
+    Validator.defaultExceptionMessageHandler = message::formatted;
+    Validator.defaultExceptionHandler = RuntimeException::new;
+    Validator<String> validator2 = Validator.build(value -> value.equals("Hola"));
+
+    var ex = assertThrows(RuntimeException.class, () -> validator2.validate("Mundo"));
+    assertEquals(message.formatted("Mundo"), ex.getMessage());
+
+  }
+
 
 }
