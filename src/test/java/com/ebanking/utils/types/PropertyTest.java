@@ -1,4 +1,4 @@
-package types;
+package com.ebanking.utils.types;
 
 import com.ebanking.utils.processor.Combiner;
 import org.junit.jupiter.api.Test;
