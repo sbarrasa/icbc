@@ -2,38 +2,20 @@ package com.ebanking.utils.validation;
 
 import java.util.*;
 
-public class ValidatorContainer<T> extends AbstractValidator<T> {
+public class ValidatorContainer<I> implements Validable<I> {
 
-  private final List<Validable<?>> validables = new ArrayList<>();
-  private final List<AbstractValidator<T>> assignableValidators = new ArrayList<>();
+  private final List<Validable<I>> validables = new ArrayList<>();
 
-  public final List<Validable<?>> validators() {
-    return validables;
-  }
-
-
-  public final ValidatorContainer<T> add(Validable<?> validator) {
+  public final ValidatorContainer<I> add(Validable<I> validator) {
     validables.add(validator);
-    return this;
-  }
-
-  public final ValidatorContainer<T> add(AbstractValidator<T> validator) {
-    validables.add(validator);
-    assignableValidators.add(validator);
     return this;
   }
 
   @Override
-  public final void validate() throws Exception {
-    assignableValidators.forEach(validator -> validator.setValue(this.getValue()));
-
-    for (Validable<?> validable : validables) {
-        validable.validate();
+  public final void validate(I input) throws Exception {
+    for (Validable<I> validable : validables) {
+      validable.validate(input);
     }
   }
-
-
-
-
 }
 

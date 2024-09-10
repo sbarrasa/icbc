@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ValidableTest {
@@ -11,9 +12,6 @@ class ValidableTest {
   void validateTest(){
 
     var validable = new Validable<>() {
-      public void validate() throws Exception {
-        throw new Exception();
-      }
 
       @Override
       public void validate(Object value) throws Exception {
@@ -22,8 +20,10 @@ class ValidableTest {
       }
 
     };
-    assertThrows(Exception.class, validable::validate);
+    assertDoesNotThrow(() -> validable.validate(1234));
     assertThrows(Exception.class, () -> validable.validate(null));
 
   }
+
+
 }

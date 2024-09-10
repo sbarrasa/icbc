@@ -3,26 +3,42 @@ package com.ebanking.utils.validation;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-public class Validator<T> extends AbstractValidator<T> {
-  public static String defaultMessage = "%s = %s (error)";
+public class Validator<I> implements Validable<I>  {
 
-  public static ValidatorExceptionHandler defaultexceptionHandler =
-          validator -> new RuntimeException(defaultMessage);
+  public static String defaultExceptionMessage = "validation error";
+
+  public static ExceptionHandler<String> defaultexceptionHandler =
+          value -> new RuntimeException(defaultExceptionMessage);
 
   public static boolean nonEmpty(String string) {
     return !Objects.isNull(string)
             && !string.trim().isEmpty();
   }
 
-  private final Predicate<T> condition;
 
-  public Validator(Predicate<T> condition) {
+  private ExceptionHandler<I> exceptionHandler ;
+
+  private final Predicate<I> condition;
+
+  public Validator(Predicate<I> condition) {
     this.condition = condition;
   }
 
-  public void validate() throws Exception {
-    if (!condition.test(getValue()))
-      throw exceptionHandler().build(this);
+  public void validate(I input) throws Exception {
+    if (!condition.test(input))
+      throw exceptionHandler().build(input);
+  }
+
+  protected ExceptionHandler<I> exceptionHandler(){
+    if(exceptionHandler == null)
+      exceptionHandler = (ExceptionHandler<I>) Validator.defaultexceptionHandler;
+
+    return this.exceptionHandler;
+  }
+
+  public Validator<I> exceptionHandler(ExceptionHandler<I> exceptionHandler){
+    this.exceptionHandler = exceptionHandler;
+    return this;
   }
 
 
