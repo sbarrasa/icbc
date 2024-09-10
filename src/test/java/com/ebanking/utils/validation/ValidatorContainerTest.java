@@ -8,10 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ValidatorContainerTest {
   ValidatorContainer<String> validator = new ValidatorContainer<String>()
-          .add(new Validator<>(Objects::nonNull))
-          .add(new Validator<>(Validator::nonEmpty))
-          .add(new Validator<>(object -> object.equals("Hola mundo")));
-
+          .add(Validator.build(Objects::nonNull))
+          .add(Validator.build(Validator::nonEmpty))
+          .add(Validator.build(object -> object.equals("Hola mundo")));
   @Test
   void validateOk() {
     assertDoesNotThrow(() -> validator.validate("Hola mundo"));

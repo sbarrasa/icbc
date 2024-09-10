@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,14 +19,18 @@ class ProcessorTest {
 
 
     @Test
-    void pipeline()  {
+    void pipeline() throws Exception {
         Function<String, String> pipeline = Function.<String>identity()
                 .andThen(input -> LocalDate.parse(input, DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .andThen(nacimientos::get)
-                .andThen(new Validator<String>(
-                        value -> Objects.isNull(value)
-                        || value.contains("Zaiper"))
-                .andThen(fullname -> fullname.substring(0, 10))
+                .andThen(new Validator<String>() {
+                    @Override
+                    protected Predicate<String> getCondition() {
+                        return     value -> Objects.isNull(value)
+                                || value.contains("Zaiper");
+                    }
+                }
+                 .andThen(fullname -> fullname.substring(0, 10))
                 .andThen(String::trim));
 
 
