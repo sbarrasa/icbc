@@ -53,7 +53,7 @@ public abstract class Validator<I> implements Validable<I> {
   }
 
   public static <I> Validator<I> build(Predicate<I> condition){
-      return new Validator<I>() {
+      return new Validator<>() {
         @Override
         protected Predicate<I> getCondition() {
           return condition;
