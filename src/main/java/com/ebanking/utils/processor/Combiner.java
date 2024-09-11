@@ -12,4 +12,7 @@ public interface Combiner<L, R, O> extends Function<Dupla<L, R>, O> {
     static <L, R, O> Combiner<L, R, O> of(BiFunction<L, R, O> combinerFunction) {
         return input -> combinerFunction.apply(input.getLeft(), input.getRight());
     }
+
+
+
 }
