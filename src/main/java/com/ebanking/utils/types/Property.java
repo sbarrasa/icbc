@@ -7,7 +7,6 @@ public class Property<V> implements Dupla<String,V> {
     private final String name;
     private V value;
 
-
     public Property(String name) {
         this.name = name;
     }
