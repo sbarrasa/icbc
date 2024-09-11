@@ -7,7 +7,11 @@ public interface Service<I, O> extends Function<I,O> {
     O get(I input);
 
     @Override
-    default O apply(I i) {
-        return get(i);
+    default O apply(I input) {
+        try {
+            return get(input);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

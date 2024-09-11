@@ -29,6 +29,7 @@ public class EntityTypeConverter implements Converter<Integer, EntityType> {
         var fValue = map.floorEntry(input);
         return fValue != null ? fValue.getValue() : null;
     }
+
     public Integer convert(EntityType entityType) {
         return getCodes(entityType).stream().findFirst().orElse(null);
     }

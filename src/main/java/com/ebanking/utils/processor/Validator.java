@@ -71,6 +71,9 @@ public abstract class Validator<I> implements Validable<I> {
       this.condition = condition;
       return this;
     }
+    public void validate(I value) throws Exception {
+      build().validate(value);
+    }
 
     public Validator<I> build() {
       return new Validator<I>() {
@@ -83,7 +86,7 @@ public abstract class Validator<I> implements Validable<I> {
     }
   }
 
-  static <I> Builder<I> builder() {
+  public static <I> Builder<I> builder() {
     return new Builder<>();
   }
 
