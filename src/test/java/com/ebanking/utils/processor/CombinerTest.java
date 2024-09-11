@@ -9,7 +9,7 @@ public class CombinerTest {
 
     @Test
     void combineObjects() {
-        var dupla = Dupla.of("Cantidad", 10);
+        var dupla = Pair.of("Cantidad", 10);
 
         Combiner<String, Integer, String> combiner = Combiner.of("%s: %d"::formatted);
 

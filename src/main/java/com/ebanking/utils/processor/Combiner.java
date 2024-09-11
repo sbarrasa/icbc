@@ -4,13 +4,13 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface Combiner<L, R, O> extends Function<Dupla<L, R>, O> {
+public interface Combiner<T1, T2, O> extends Function<Pair<T1, T2>, O> {
 
     @Override
-    O apply(Dupla<L, R> input);
+    O apply(Pair<T1, T2> input);
 
-    static <L, R, O> Combiner<L, R, O> of(BiFunction<L, R, O> combinerFunction) {
-        return input -> combinerFunction.apply(input.getLeft(), input.getRight());
+    static <T1, T2, O> Combiner<T1, T2, O> of(BiFunction<T1, T2, O> combinerFunction) {
+        return input -> combinerFunction.apply(input.getFirst(), input.getSecond());
     }
 
 

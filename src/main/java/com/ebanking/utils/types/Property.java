@@ -1,8 +1,8 @@
 package com.ebanking.utils.types;
 
-import com.ebanking.utils.processor.Dupla;
+import com.ebanking.utils.processor.Pair;
 
-public class Property<V> implements Dupla<String,V> {
+public class Property<V> implements Pair<String,V> {
 
     private final String name;
     private V value;
@@ -22,8 +22,8 @@ public class Property<V> implements Dupla<String,V> {
     public V getValue() { return value; }
 
     @Override
-    public String getLeft() { return getName(); }
+    public String getFirst() { return getName(); }
 
     @Override
-    public V getRight() { return getValue(); }
+    public V getSecond() { return getValue(); }
 }

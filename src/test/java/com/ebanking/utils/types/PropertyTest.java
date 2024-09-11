@@ -25,8 +25,8 @@ class PropertyTest {
         Combiner<String, String, String> combiner = Combiner.of("%s: %s"::formatted);
 
         var property = new Property<>("Nombre", "Zaiper");
-        assertNotNull(property.getLeft(), "El nombre no debe ser nulo");
-        assertNotNull(property.getRight(), "El valor no debe ser nulo");
+        assertNotNull(property.getFirst(), "El nombre no debe ser nulo");
+        assertNotNull(property.getSecond(), "El valor no debe ser nulo");
 
         String formatted = combiner.apply(property);
         assertEquals("Nombre: Zaiper", formatted);

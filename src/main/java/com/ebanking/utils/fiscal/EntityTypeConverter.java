@@ -42,10 +42,10 @@ public class EntityTypeConverter implements Converter<Integer, EntityType> {
                 .collect(Collectors.toList());
     }
 
-
     public static EntityTypeConverter getInstance() {
        if(instance == null)
            instance = new EntityTypeConverter();
        return instance;
     }
+
 }

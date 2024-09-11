@@ -22,7 +22,7 @@ class PipelineTest {
               .exceptionHandler(RuntimeException::new);
 
       var process = stringToDate
-                          .andThen(birthDay -> Dupla.of(
+                          .andThen(birthDay -> Pair.of(
                                                         birthDay,
                                                         getAuthor
                                                           .andThen(exists)
@@ -32,8 +32,8 @@ class PipelineTest {
 
       var author1 = process.apply("07/06/1974");
 
-      assertEquals("Barrasa, Sebastián Zaiper", author1.getRight().getFullname());
-      assertEquals(LocalDate.of(1974, 6,7), author1.getLeft());
+      assertEquals("Barrasa, Sebastián Zaiper", author1.getSecond().getFullname());
+      assertEquals(LocalDate.of(1974, 6,7), author1.getFirst());
 
       assertDoesNotThrow(() -> process.apply("07/06/1974"));
       assertThrows(Exception.class, () -> process.apply("01/01/1914"));

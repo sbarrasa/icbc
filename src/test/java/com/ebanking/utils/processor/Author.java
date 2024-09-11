@@ -1,6 +1,6 @@
 package com.ebanking.utils.processor;
 
-public class Author implements Dupla<String, String> {
+public class Author implements Pair<String, String> {
   private final String name;
   private final String lastName;
 
@@ -12,16 +12,16 @@ public class Author implements Dupla<String, String> {
   public String getFullname(){
     return "%s, %s".formatted(getApellido(), getNombre());
   }
-  public String getNombre() {return getLeft();}
-  public String getApellido() {return getRight();}
+  public String getNombre() {return getFirst();}
+  public String getApellido() {return getSecond();}
 
   @Override
-  public String getLeft() {
+  public String getFirst() {
     return name;
   }
 
   @Override
-  public String getRight() {
+  public String getSecond() {
     return lastName;
   }
 }
