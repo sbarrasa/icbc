@@ -29,11 +29,9 @@ class ValidatorTest {
   void builder() {
     var mensaje = "%s debe ser Hola";
 
-    var validator = Validator.builder()
+    var validator = Validator.<String>build("Hola"::equals)
             .exceptionMessageHandler(mensaje::formatted)
-            .exceptionHandler(RuntimeException::new)
-            .condition("Hola"::equals)
-             .build();
+            .exceptionHandler(RuntimeException::new);
 
     assertDoesNotThrow(() -> validator.validate("Hola"));
     assertThrows(RuntimeException.class, () -> validator.validate(""));

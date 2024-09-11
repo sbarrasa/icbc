@@ -58,8 +58,7 @@ public abstract class Cuit {
         private Cuit parse(String cuit, String separator) throws Exception {
             String[] parts = cuit.split(separator);
 
-            Validator.<String[]>builder()
-                    .condition((value) -> value.length == 3)
+            Validator.<String[]>build((value) -> value.length == 3)
                     .exceptionHandler(RuntimeException::new)
                     .exceptionMessageHandler((value) -> INVALID_CUIT_FORMAT)
                     .validate(parts);
@@ -68,8 +67,7 @@ public abstract class Cuit {
         }
 
         private Cuit parse(String cuit) throws Exception {
-            Validator.<String>builder()
-                    .condition(value -> value.length() == 11)
+            Validator.<String>build(value -> value.length() == 11)
                     .exceptionHandler(IllegalArgumentException::new)
                     .exceptionMessageHandler(value -> INVALID_CUIT_SIZE)
                     .validate(cuit);

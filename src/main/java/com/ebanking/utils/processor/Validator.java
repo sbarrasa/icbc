@@ -52,48 +52,12 @@ public abstract class Validator<I> implements Validable<I> {
     return this;
   }
 
-  public static class Builder<I> {
-    private Function<I, String> exceptionMessageHandler;
-    private ExceptionHandler exceptionHandler;
-    private Predicate<I> condition;
-
-    public Builder<I> exceptionHandler(ExceptionHandler exceptionHandler) {
-      this.exceptionHandler = exceptionHandler;
-      return this;
-    }
-
-    public Builder<I> exceptionMessageHandler(Function<I, String> exceptionMessageHandler) {
-      this.exceptionMessageHandler = exceptionMessageHandler;
-      return this;
-    }
-
-    public Builder<I> condition(Predicate<I> condition) {
-      this.condition = condition;
-      return this;
-    }
-    public void validate(I value) throws Exception {
-      build().validate(value);
-    }
-
-    public Validator<I> build() {
+  public static <I> Validator<I> build(Predicate<I> condition){
       return new Validator<I>() {
         @Override
-        public Predicate<I> getCondition() {
+        protected Predicate<I> getCondition() {
           return condition;
         }
-      }.exceptionHandler(this.exceptionHandler)
-              .exceptionMessageHandler(this.exceptionMessageHandler);
+      };
     }
-  }
-
-  public static <I> Builder<I> builder() {
-    return new Builder<>();
-  }
-
-  @SuppressWarnings("unchecked")
-  public static <I> Validator<I> build(Predicate<I> condition) {
-    return (Validator<I>) builder()
-            .condition((Predicate<Object>) condition)
-            .build();
-  }
 }

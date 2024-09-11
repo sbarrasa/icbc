@@ -18,10 +18,8 @@ class PipelineTest {
 
       Service<LocalDate, Author> getAuthor = Service.of(AuthorService::get);
 
-      Validator<Author> exists = Validator.<Author>builder()
-              .condition(Objects::nonNull)
-              .exceptionHandler(RuntimeException::new)
-              .build();
+      Validator<Author> exists = Validator.<Author>build(Objects::nonNull)
+              .exceptionHandler(RuntimeException::new);
 
       var process = stringToDate
                           .andThen(birthDay -> Dupla.of(
