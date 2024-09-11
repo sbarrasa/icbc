@@ -23,4 +23,5 @@ class PairTest {
 
         assertEquals(10, property.getSecond());
     }
+
 }

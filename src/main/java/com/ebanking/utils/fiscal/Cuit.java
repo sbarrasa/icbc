@@ -16,6 +16,8 @@ public abstract class Cuit {
     public abstract Integer getId();
     public abstract Integer getVerificationDigit();
 
+    public static final StringConverter converter = new StringConverter();
+
     public EntityType getEntityType() {
         return EntityTypeConverter.getInstance().convert(getEntityTypeCode());
     }
@@ -45,6 +47,7 @@ public abstract class Cuit {
 
 
     public static class StringConverter implements Converter<String, Cuit>{
+
         @Override
         public Cuit convert(String cuit) throws Exception {
             Objects.requireNonNull(cuit, INVALID_CUIT_NULL);
@@ -82,7 +85,7 @@ public abstract class Cuit {
     }
 
     public static Cuit of(String cuit) throws Exception {
-        return new StringConverter().convert(cuit);
+        return converter.convert(cuit);
     }
 
 
