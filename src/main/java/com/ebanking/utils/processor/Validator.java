@@ -14,6 +14,12 @@ public abstract class Validator<I> implements Validable<I> {
             && !string.trim().isEmpty();
   }
 
+  public static Validator<Object> notNullValidator = Validator.build(Objects::nonNull)
+          .exceptionMessageHandler("El valor no debe ser null"::formatted);
+
+  public static Validator<String> notEmptyValidator = Validator.<String>build(Validator::nonEmpty)
+            .exceptionMessageHandler("El valor no debe estar vacío"::formatted);
+
   private ExceptionHandler exceptionHandler;
   private MessageHandler<I> exceptionMessageHandler;
 
@@ -58,5 +64,5 @@ public abstract class Validator<I> implements Validable<I> {
           return condition;
         }
       };
-    }
+  }
 }

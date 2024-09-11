@@ -6,9 +6,19 @@ import com.ebanking.utils.processor.Validator;
 import java.util.Objects;
 
 public abstract class Cuit {
+    public static String INVALID_CUIT_NULL = "El CUIT no puede ser nulo";
     public static String INVALID_CUIT_SIZE = "El CUIT debe tener 11 dígitos";
-    public static String INVALID_CUIT_FORMAT = "Un CUIT debe tener tres componentes 20-12345678-0";
-    public static String INVALID_CUIT_NULL = "CUIT no puede ser nulo";
+    public static String INVALID_CUIT_FORMAT = "Formato de CUIT inválido";
+    private static final Validator<Object> notNullValidator = Validator
+            .build(Objects::nonNull)
+            .exceptionMessageHandler(INVALID_CUIT_NULL::formatted);
+    private static final Validator<String[]> partsValidator = Validator
+            .<String[]>build(parts -> parts.length == 3)
+            .exceptionMessageHandler((value) -> INVALID_CUIT_FORMAT);
+
+    private static final Validator<String> invalidSizeValidator = Validator
+            .<String>build(cuit -> cuit.length() == 11)
+            .exceptionMessageHandler(cuit -> INVALID_CUIT_SIZE);
 
     public static final String SEPARATOR = "-";
 
@@ -17,10 +27,6 @@ public abstract class Cuit {
     public abstract Integer getVerificationDigit();
 
     public static final StringConverter converter = new StringConverter();
-
-    public EntityType getEntityType() {
-        return EntityTypeConverter.getInstance().convert(getEntityTypeCode());
-    }
 
     @Override
     public String toString() {
@@ -45,12 +51,15 @@ public abstract class Cuit {
         return Objects.hash(getEntityTypeCode(), getId(), getVerificationDigit());
     }
 
+    public EntityType getEntityType() {
+        return EntityTypeConverter.instance.convert(this.getEntityTypeCode());
+    }
+
 
     public static class StringConverter implements Converter<String, Cuit>{
-
         @Override
         public Cuit convert(String cuit) throws Exception {
-            Objects.requireNonNull(cuit, INVALID_CUIT_NULL);
+            notNullValidator.validate(cuit);
             if (cuit.contains(SEPARATOR)) {
                 return parse(cuit, SEPARATOR);
             } else {
@@ -59,22 +68,16 @@ public abstract class Cuit {
         }
 
         private Cuit parse(String cuit, String separator) throws Exception {
-            String[] parts = cuit.split(separator);
+           String[] parts = cuit.split(separator);
 
-            Validator.<String[]>build((value) -> value.length == 3)
-                    .exceptionHandler(RuntimeException::new)
-                    .exceptionMessageHandler((value) -> INVALID_CUIT_FORMAT)
-                    .validate(parts);
-            
-            return Cuit.of(parts[0], parts[1], parts[2]);
+           partsValidator.validate(parts);
+
+           return Cuit.of(parts[0], parts[1], parts[2]);
         }
 
         private Cuit parse(String cuit) throws Exception {
-            Validator.<String>build(value -> value.length() == 11)
-                    .exceptionHandler(IllegalArgumentException::new)
-                    .exceptionMessageHandler(value -> INVALID_CUIT_SIZE)
-                    .validate(cuit);
-           
+            invalidSizeValidator.validate(cuit);
+
             return Cuit.of(Integer.parseInt(cuit.substring(0, 2)),
                             Integer.parseInt(cuit.substring(2, 10)),
                             Integer.parseInt(cuit.substring(10))
@@ -89,16 +92,16 @@ public abstract class Cuit {
     }
 
 
-    public static Cuit of(String entityTypeCode, String id, String verificationDigit) {
+    public static Cuit of(String entityTypeCode, String id, String verificationDigit) throws Exception {
         return of(Integer.parseInt(entityTypeCode),
                 Integer.parseInt(id),
                 Integer.parseInt(verificationDigit));
     }
 
-    public static Cuit of(Integer entityTypeCode, Integer id, Integer verificationDigit) {
-        Objects.requireNonNull(entityTypeCode);
-        Objects.requireNonNull(id);
-        Objects.requireNonNull(verificationDigit);
+    public static Cuit of(Integer entityTypeCode, Integer id, Integer verificationDigit) throws Exception {
+        notNullValidator.validate(entityTypeCode);
+        notNullValidator.validate(id);
+        notNullValidator.validate(verificationDigit);
         return new Cuit() {
             @Override
             public Integer getEntityTypeCode() {

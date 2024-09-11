@@ -24,7 +24,7 @@ class CuitTest {
     }
 
     @Test
-    void testConstructorFromComponents() {
+    void testConstructorFromComponents() throws Exception {
         Cuit cuit = Cuit.of("20", "1234567", "9");
         assertEquals(20, cuit.getEntityTypeCode());
         assertEquals(1234567, cuit.getId());

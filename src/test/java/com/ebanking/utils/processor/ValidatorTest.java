@@ -42,10 +42,16 @@ class ValidatorTest {
 
   @Test
   void notEmpty(){
-    Validator<String> validator = Validator.build(Validator::nonEmpty);
-
+    Validator<String> validator = Validator.notEmptyValidator;
     assertThrows(Exception.class, () -> validator.validate(""));
     assertThrows(Exception.class, () -> validator.validate(" "));
+    assertThrows(Exception.class, () -> validator.validate(null));
+    assertDoesNotThrow(() -> validator.validate("Hola mundo"));
+  }
+
+  @Test
+  void notNUll() {
+    var validator = Validator.notNullValidator;
     assertThrows(Exception.class, () -> validator.validate(null));
     assertDoesNotThrow(() -> validator.validate("Hola mundo"));
 

@@ -10,7 +10,7 @@ class EntityTypeConverterTest {
 
     @Test
     void codeToEntityType() {
-        var converter = EntityTypeConverter.getInstance();
+        var converter = EntityTypeConverter.instance;
 
         assertEquals(UNIPERSONAL, converter.convert(20));
         assertEquals(COMPANY, converter.convert(30));
@@ -23,7 +23,7 @@ class EntityTypeConverterTest {
 
     @Test
     void entityTypeToCodes() {
-        var converter = EntityTypeConverter.getInstance();
+        var converter = EntityTypeConverter.instance;
         assertFalse(converter.getCodes(UNIPERSONAL).isEmpty());
         assertFalse(converter.getCodes(COMPANY).isEmpty());
         assertTrue(converter.getCodes(UNIPERSONAL).size() >= 1);
@@ -32,7 +32,7 @@ class EntityTypeConverterTest {
 
     @Test
     void entityTypeToCode(){
-        var converter = EntityTypeConverter.getInstance();
+        var converter = EntityTypeConverter.instance;
         assertEquals(20, converter.convert(UNIPERSONAL));
         assertEquals(30, converter.convert(COMPANY));
 
