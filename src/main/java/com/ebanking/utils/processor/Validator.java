@@ -1,12 +1,11 @@
 package com.ebanking.utils.processor;
 
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public abstract class Validator<I> implements Validable<I> {
 
-  public static Function<?, String> defaultExceptionMessageHandler = "value error (%s)"::formatted;
+  public static MessageHandler<?> defaultExceptionMessageHandler = "value error (%s)"::formatted;
 
   public static ExceptionHandler defaultExceptionHandler = Exception::new;
 
@@ -16,7 +15,7 @@ public abstract class Validator<I> implements Validable<I> {
   }
 
   private ExceptionHandler exceptionHandler;
-  private Function<I, String> exceptionMessageHandler;
+  private MessageHandler<I> exceptionMessageHandler;
 
   protected abstract Predicate<I> getCondition();
 
@@ -28,9 +27,9 @@ public abstract class Validator<I> implements Validable<I> {
   }
 
   @SuppressWarnings("unchecked")
-  public Function<I, String> exceptionMessageHandler() {
+  public MessageHandler<I> exceptionMessageHandler() {
     if(exceptionMessageHandler == null)
-      exceptionMessageHandler = (Function<I, String>) defaultExceptionMessageHandler;
+      exceptionMessageHandler = (MessageHandler<I>) defaultExceptionMessageHandler;
 
     return exceptionMessageHandler;
   }
@@ -47,7 +46,7 @@ public abstract class Validator<I> implements Validable<I> {
     return this;
   }
 
-  public Validator<I> exceptionMessageHandler(Function<I, String> exceptionMessageHandler) {
+  public Validator<I> exceptionMessageHandler(MessageHandler<I> exceptionMessageHandler) {
     this.exceptionMessageHandler = exceptionMessageHandler;
     return this;
   }
