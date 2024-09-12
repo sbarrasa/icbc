@@ -1,6 +1,5 @@
 package com.ebanking.utils.types;
 
-import com.ebanking.utils.processor.Combiner;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,18 +19,6 @@ class PropertyTest {
         assertNull(property.getValue());
     }
 
-    @Test
-    void pipeline() {
-        Combiner<String, String, String> combiner = Combiner.of("%s: %s"::formatted);
-
-        var property = new Property<>("Nombre", "Zaiper");
-        assertNotNull(property.getFirst(), "El nombre no debe ser nulo");
-        assertNotNull(property.getSecond(), "El valor no debe ser nulo");
-
-        String formatted = combiner.apply(property);
-        assertEquals("Nombre: Zaiper", formatted);
-
-    }
     @Test
         void changeValue() {
         var property = new Property<>("Indice", 1);

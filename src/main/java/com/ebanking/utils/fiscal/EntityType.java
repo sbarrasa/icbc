@@ -10,6 +10,7 @@ public enum EntityType {
     UNIPERSONAL,
     COMPANY;
 
+    public static final Integer codeSize = 2;
 
     public static final NavigableMap<String, EntityType> codeMap = new TreeMap<>() {{
         put("20", EntityType.UNIPERSONAL);
@@ -33,12 +34,13 @@ public enum EntityType {
 
     };
 
-    public static final Validator<String> codeValidator = Validator.build(Validator.isDigits)
-                        .setExceptionMessage("Código de entidad de AFIP incorrecto");
+    public static final Validator<String> codeValidator = Validator.<String>build(
+            value -> Validator.isDigits.test(value) && value.length() >= codeSize)
+                        .setExceptionMessage("%s no es un código de entidad de AFIP válido");
 
     public static final Converter<String, String> codeConverter = input -> {
         codeValidator.validate(input);
-        return input.substring(0, 2);
+        return input.substring(0, codeSize);
     };
 }
 
