@@ -5,56 +5,53 @@ import java.util.function.Predicate;
 
 public abstract class Validator<I> implements Validable<I> {
 
-  public static MessageHandler<?> defaultExceptionMessageHandler = "value error (%s)"::formatted;
+  public static String defaultExceptionMessage = "value error (%s)";
 
   public static ExceptionHandler defaultExceptionHandler = Exception::new;
 
-  public static boolean nonEmpty(String string) {
-    return !Objects.isNull(string)
-            && !string.trim().isEmpty();
-  }
+  public static Predicate<String> noNull = Objects::nonNull;
 
-  public static Validator<Object> notNullValidator = Validator.build(Objects::nonNull)
-          .exceptionMessageHandler("El valor no debe ser null"::formatted);
+  public static Predicate<String> nonEmpty = string -> noNull.test(string)
+                                                    && !string.trim().isEmpty();
 
-  public static Validator<String> notEmptyValidator = Validator.<String>build(Validator::nonEmpty)
-            .exceptionMessageHandler("El valor no debe estar vacío"::formatted);
 
   private ExceptionHandler exceptionHandler;
-  private MessageHandler<I> exceptionMessageHandler;
+
+  public static Predicate<String> isDigits = string -> nonEmpty.test(string)
+          && string.chars().allMatch(Character::isDigit);
+
+  private String exceptionMessage = defaultExceptionMessage;
+
 
   protected abstract Predicate<I> getCondition();
 
+  @Override
   public void validate(I input) throws Exception {
     if (!getCondition().test(input)) {
-      String message = exceptionMessageHandler().apply(input);
-      throw exceptionHandler().apply(message);
+      throw getExceptionHandler().apply(exceptionMessage.formatted(input));
     }
   }
 
-  @SuppressWarnings("unchecked")
-  public MessageHandler<I> exceptionMessageHandler() {
-    if(exceptionMessageHandler == null)
-      exceptionMessageHandler = (MessageHandler<I>) defaultExceptionMessageHandler;
 
-    return exceptionMessageHandler;
-  }
-
-  public ExceptionHandler exceptionHandler() {
+  public ExceptionHandler getExceptionHandler() {
     if(exceptionHandler == null)
       exceptionHandler=defaultExceptionHandler;
 
     return this.exceptionHandler;
   }
 
-  public Validator<I> exceptionHandler(ExceptionHandler exceptionHandler) {
+  public Validator<I> setExceptionHandler(ExceptionHandler exceptionHandler) {
     this.exceptionHandler = exceptionHandler;
     return this;
   }
 
-  public Validator<I> exceptionMessageHandler(MessageHandler<I> exceptionMessageHandler) {
-    this.exceptionMessageHandler = exceptionMessageHandler;
+  public Validator<I> setExceptionMessage(String exceptionMessage) {
+    this.exceptionMessage = exceptionMessage;
     return this;
+  }
+
+  public String getExceptionMessage() {
+    return  this.exceptionMessage;
   }
 
   public static <I> Validator<I> build(Predicate<I> condition){
@@ -65,4 +62,5 @@ public abstract class Validator<I> implements Validable<I> {
         }
       };
   }
+
 }

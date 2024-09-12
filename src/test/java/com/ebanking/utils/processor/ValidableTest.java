@@ -13,14 +13,13 @@ class ValidableTest {
   void validateTest(){
 
     var validable = new Validable<>() {
-
       @Override
       public void validate(Object value) throws Exception {
         if(Objects.isNull(value))
             throw new Exception();
       }
-
     };
+
     assertDoesNotThrow(() -> validable.validate(1234));
     assertThrows(Exception.class, () -> validable.validate(null));
 

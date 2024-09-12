@@ -27,35 +27,27 @@ class ValidatorTest {
 
   @Test
   void builder() {
-    var mensaje = "%s debe ser Hola";
 
     var validator = Validator.<String>build("Hola"::equals)
-            .exceptionMessageHandler(mensaje::formatted)
-            .exceptionHandler(RuntimeException::new);
+            .setExceptionMessage("%s debe ser Hola")
+            .setExceptionHandler(RuntimeException::new);
 
     assertDoesNotThrow(() -> validator.validate("Hola"));
     assertThrows(RuntimeException.class, () -> validator.validate(""));
     var ex = assertThrows(RuntimeException.class, () -> validator.validate("Chau"));
-    assertEquals(mensaje.formatted("Chau"), ex.getMessage());
+    assertEquals(validator.getExceptionMessage().formatted("Chau"), ex.getMessage());
 
   }
 
   @Test
   void notEmpty(){
-    Validator<String> validator = Validator.notEmptyValidator;
+    Validator<String> validator = Validator.build(Validator.nonEmpty);
     assertThrows(Exception.class, () -> validator.validate(""));
     assertThrows(Exception.class, () -> validator.validate(" "));
     assertThrows(Exception.class, () -> validator.validate(null));
     assertDoesNotThrow(() -> validator.validate("Hola mundo"));
   }
 
-  @Test
-  void notNUll() {
-    var validator = Validator.notNullValidator;
-    assertThrows(Exception.class, () -> validator.validate(null));
-    assertDoesNotThrow(() -> validator.validate("Hola mundo"));
-
-  }
 
   @Test
   void changeExceptionDefault(){
@@ -63,13 +55,12 @@ class ValidatorTest {
     var validator = Validator.build(Objects::nonNull);
     assertThrows(Exception.class, () -> validator.validate(null));
 
-    var message = "%s es inválido";
-    Validator.defaultExceptionMessageHandler = message::formatted;
+    Validator.defaultExceptionMessage = "PRUEBA";
     Validator.defaultExceptionHandler = RuntimeException::new;
     Validator<String> validator2 = Validator.build(value -> value.equals("Hola"));
 
     var ex = assertThrows(RuntimeException.class, () -> validator2.validate("Mundo"));
-    assertEquals(message.formatted("Mundo"), ex.getMessage());
+    assertEquals("PRUEBA", ex.getMessage());
 
   }
 

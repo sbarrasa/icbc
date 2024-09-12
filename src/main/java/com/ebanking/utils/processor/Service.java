@@ -15,7 +15,4 @@ public interface Service<I, O> extends Function<I,O> {
         }
     }
 
-    static <I, O> Service<I, O> of(Service<I, O> service) {
-        return service;
-    }
 }

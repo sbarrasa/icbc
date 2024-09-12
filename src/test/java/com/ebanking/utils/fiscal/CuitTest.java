@@ -9,26 +9,26 @@ class CuitTest {
     @Test
     void testConstructorFromStringWithSeparator() throws Exception {
         Cuit cuit = Cuit.of("20-12345678-9");
-        assertEquals(20, cuit.getEntityTypeCode());
-        assertEquals(12345678, cuit.getId());
-        assertEquals(9, cuit.getVerificationDigit());
+        assertEquals("20", cuit.getEntityTypeCode());
+        assertEquals("12345678", cuit.getId());
+        assertEquals("9", cuit.getVerificationDigit());
     }
 
     @Test
     void testConstructorFromStringWithoutSeparator() throws Exception {
         Cuit cuit = Cuit.of("20123456789");
 
-        assertEquals(20, cuit.getEntityTypeCode());
-        assertEquals(12345678, cuit.getId());
-        assertEquals(9, cuit.getVerificationDigit());
+        assertEquals("20", cuit.getEntityTypeCode());
+        assertEquals("12345678", cuit.getId());
+        assertEquals("9", cuit.getVerificationDigit());
     }
 
     @Test
     void testConstructorFromComponents() throws Exception {
         Cuit cuit = Cuit.of("20", "1234567", "9");
-        assertEquals(20, cuit.getEntityTypeCode());
-        assertEquals(1234567, cuit.getId());
-        assertEquals(9, cuit.getVerificationDigit());
+        assertEquals("20", cuit.getEntityTypeCode());
+        assertEquals("1234567", cuit.getId());
+        assertEquals("9", cuit.getVerificationDigit());
     }
 
     @Test
@@ -64,7 +64,7 @@ class CuitTest {
     @Test
     void testParseWithSeparatorException() {
         Exception exception = assertThrows(Exception.class, () -> Cuit.of("20-1234567"));
-        assertEquals(Cuit.INVALID_CUIT_FORMAT, exception.getMessage());
+        assertEquals(Cuit.partsCountValidator.getExceptionMessage(), exception.getMessage());
     }
 
     @Test
@@ -72,6 +72,6 @@ class CuitTest {
         Exception exception = assertThrows(Exception.class, () -> {
             Cuit.of("201234567"); // Invalid length
         });
-        assertEquals(Cuit.INVALID_CUIT_SIZE, exception.getMessage());
+        assertEquals(Cuit.sizeValidator.getExceptionMessage(), exception.getMessage());
     }
 }

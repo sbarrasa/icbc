@@ -3,7 +3,6 @@ package com.ebanking.utils.types;
 import com.ebanking.utils.processor.Pair;
 
 public class Property<V> implements Pair<String,V> {
-
     private final String name;
     private V value;
 
