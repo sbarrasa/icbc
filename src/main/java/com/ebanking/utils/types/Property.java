@@ -1,7 +1,5 @@
 package com.ebanking.utils.types;
 
-import com.ebanking.utils.processor.Pair;
-
 public class Property<V> implements Pair<String,V> {
     private final String name;
     private V value;
@@ -21,8 +19,8 @@ public class Property<V> implements Pair<String,V> {
     public V getValue() { return value; }
 
     @Override
-    public String getFirst() { return getName(); }
+    public String getData1() { return getName(); }
 
     @Override
-    public V getSecond() { return getValue(); }
+    public V getData2() { return getValue(); }
 }

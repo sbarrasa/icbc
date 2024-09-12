@@ -1,5 +1,6 @@
 package com.ebanking.utils.processor;
 
+import com.ebanking.utils.types.Pair;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PairTest {
 
     @Test
-    void dupla() {
+    void test() {
         var apellido = "Barrasa";
         var nombre = "Sebastián Gabriel";
         var nombres = Pair.of(apellido, nombre);
 
-        assertEquals(apellido, nombres.getFirst());
-        assertEquals(nombre, nombres.getSecond());
+        assertEquals(apellido, nombres.getData1());
+        assertEquals(nombre, nombres.getData2());
 
     }
 
@@ -21,7 +22,7 @@ class PairTest {
     void property(){
         Pair<String, Integer> property = Pair.of("Cantidad", 10);
 
-        assertEquals(10, property.getSecond());
+        assertEquals(10, property.getData2());
     }
 
 }
