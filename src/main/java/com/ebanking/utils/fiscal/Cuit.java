@@ -1,6 +1,6 @@
 package com.ebanking.utils.fiscal;
 
-import com.ebanking.utils.processor.Converter;
+import com.ebanking.utils.converter.Converter;
 import com.ebanking.utils.validator.NotNullValidator;
 import com.ebanking.utils.validator.Validator;
 
@@ -50,11 +50,11 @@ public abstract class Cuit {
     }
 
     public EntityType getEntityType() throws Exception {
-        return EntityType.codeConverter.convert(this.getEntityTypeCode());
+        return EntityType.codeConverter.from(this.getEntityTypeCode());
     }
 
     public static Cuit of(String cuit) throws Exception {
-        return stringConverter.convert(cuit);
+        return stringConverter.from(cuit);
 
     }
 
@@ -87,7 +87,7 @@ public abstract class Cuit {
 
     private static final Converter<String, Cuit> stringConverter = new Converter<>(){
         @Override
-        public Cuit convert(String cuit) throws Exception {
+        public Cuit from(String cuit) throws Exception {
             notNullValidator.validate(cuit);
             if (cuit.contains(SEPARATOR)) {
                 return parse(cuit, SEPARATOR);

@@ -1,4 +1,4 @@
-package com.ebanking.utils.processor;
+package com.ebanking.utils.types;
 
 import com.ebanking.utils.types.Pair;
 import org.junit.jupiter.api.Test;

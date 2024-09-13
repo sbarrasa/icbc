@@ -1,6 +1,6 @@
 package com.ebanking.utils.fiscal;
 
-import com.ebanking.utils.processor.Converter;
+import com.ebanking.utils.converter.Converter;
 import com.ebanking.utils.validator.DigitValidator;
 import com.ebanking.utils.validator.NotNullValidator;
 import com.ebanking.utils.validator.Validator;
@@ -15,7 +15,7 @@ public enum EntityType {
 
     public static final Converter<String, EntityType> codeConverter = new Converter<>() {
         @Override
-        public EntityType convert(String input) throws Exception {
+        public EntityType from(String input) throws Exception {
             codeValidator.validate(input);
 
             String code = input.substring(0, codeSize);
