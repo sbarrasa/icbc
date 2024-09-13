@@ -1,6 +1,7 @@
 package com.ebanking.utils.fiscal;
 
 import com.ebanking.utils.processor.Converter;
+import com.ebanking.utils.processor.NotNullValidator;
 import com.ebanking.utils.processor.Validator;
 
 import java.util.Objects;
@@ -9,8 +10,7 @@ public abstract class Cuit {
 
     public static final String SEPARATOR = "-";
 
-    public static final Validator<Object> notNullValidator = Validator
-            .build(Objects::nonNull)
+    private static final Validator<Object> notNullValidator = new NotNullValidator()
             .setExceptionMessage("El CUIT no puede ser nulo");
 
     public static final Validator<String[]> partsCountValidator = Validator
@@ -50,7 +50,7 @@ public abstract class Cuit {
     }
 
     public EntityType getEntityType() throws Exception {
-        return EntityType.converter.convert(this.getEntityTypeCode());
+        return EntityType.codeConverter.convert(this.getEntityTypeCode());
     }
 
     public static Cuit of(String cuit) throws Exception {

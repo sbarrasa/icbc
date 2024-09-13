@@ -13,15 +13,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class PipelineTest {
-    public static final List<Pair<String, LocalDate>> authorsMap = List.of(
-            Pair.of("Sebastián Zaiper Barrasa", LocalDate.of(1974, 6, 7)),
-            Pair.of("Julio Florencio Cortazar", LocalDate.of(1914, 8, 26)),
-            Pair.of("Oliverio Girondo",LocalDate.of(1891, 8, 17)),
-            Pair.of("Sebastián Perez", LocalDate.of(1914, 1, 1))
-    );
-
     @Test
     void test() throws Exception {
+        List<Pair<String, LocalDate>> authorsMap = List.of(
+                Pair.of("Sebastián Zaiper Barrasa", LocalDate.of(1974, 6, 7)),
+                Pair.of("Julio Florencio Cortazar", LocalDate.of(1914, 8, 26)),
+                Pair.of("Oliverio Girondo",LocalDate.of(1891, 8, 17)),
+                Pair.of("Sebastián Perez", LocalDate.of(1914, 1, 1))
+        );
+
+
         Service<Integer, Pair<String, LocalDate>> byIndexService = authorsMap::get;
 
         BiFunction<String, LocalDate, String> authorToStringConverter = (name, date) ->

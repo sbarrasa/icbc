@@ -1,6 +1,5 @@
 package com.ebanking.utils.processor;
 
-import java.util.Objects;
 import java.util.function.Predicate;
 
 public abstract class Validator<I> implements Validable<I> {
@@ -9,9 +8,7 @@ public abstract class Validator<I> implements Validable<I> {
 
   public static ExceptionHandler defaultExceptionHandler = Exception::new;
 
-  public static Predicate<String> noNull = Objects::nonNull;
-
-  public static Predicate<String> nonEmpty = string -> noNull.test(string)
+  public static Predicate<String> nonEmpty = string -> string !=null
                                                     && !string.trim().isEmpty();
 
 
