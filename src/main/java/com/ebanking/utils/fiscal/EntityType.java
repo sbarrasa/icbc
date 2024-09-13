@@ -1,9 +1,9 @@
 package com.ebanking.utils.fiscal;
 
 import com.ebanking.utils.processor.Converter;
-import com.ebanking.utils.processor.DigitValidator;
-import com.ebanking.utils.processor.NotNullValidator;
-import com.ebanking.utils.processor.Validator;
+import com.ebanking.utils.validator.DigitValidator;
+import com.ebanking.utils.validator.NotNullValidator;
+import com.ebanking.utils.validator.Validator;
 
 
 public enum EntityType {

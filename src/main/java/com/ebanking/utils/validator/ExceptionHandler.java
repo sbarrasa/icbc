@@ -1,4 +1,4 @@
-package com.ebanking.utils.processor;
+package com.ebanking.utils.validator;
 
 import java.util.function.Function;
 
