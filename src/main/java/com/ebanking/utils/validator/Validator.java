@@ -6,7 +6,7 @@ public abstract class Validator<I> implements Validable<I> {
 
   public static String defaultExceptionMessage = "value error (%s)";
 
-  public static ExceptionHandler defaultExceptionHandler = Exception::new;
+  public static ExceptionHandler defaultExceptionHandler = RuntimeException::new;
 
   public static Predicate<String> nonEmpty = string -> string !=null
                                                     && !string.trim().isEmpty();

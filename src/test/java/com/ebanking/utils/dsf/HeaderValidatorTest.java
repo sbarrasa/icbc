@@ -15,7 +15,7 @@ class HeaderValidatorTest {
     header.setTransactionId("TX12345");
 
     HeaderValidator validator = new HeaderValidator();
-    assertTrue(validator.getCondition().test(header));
+    assertDoesNotThrow(() -> validator.validate(header));
   }
 
   @Test
@@ -27,6 +27,6 @@ class HeaderValidatorTest {
     header.setTransactionId("TX12345");
 
     HeaderValidator validator = new HeaderValidator();
-    assertFalse(validator.getCondition().test(header));
+    assertThrows(Exception.class, ()-> validator.validate(header));
   }
 }

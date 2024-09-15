@@ -3,6 +3,7 @@ package com.ebanking.utils.validator;
 import org.junit.jupiter.api.Test;
 
 
+import java.util.InputMismatchException;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -62,6 +63,29 @@ class ValidatorTest {
     assertEquals("PRUEBA", ex.getMessage());
 
   }
+
+  @Test
+  void changeExceptionHandler(){
+
+    var exceptionMessage = "Error personalizado %s";
+    var validator = Validator.build(Objects::nonNull);
+    validator.getExceptionBuilder()
+        .setMessage(exceptionMessage)
+        .setExceptionHandler(InputMismatchException::new);
+    boolean flag;
+    try{
+        validator.apply(null);
+        flag = true;
+    } catch (InputMismatchException e) {
+      flag = false;
+    }
+
+    assertEquals(true, flag);
+    var ex = assertThrows(RuntimeException.class, () -> validator.validate(null));
+    assertEquals(exceptionMessage.formatted(null), ex.getMessage());
+
+  }
+
 
 
 }
