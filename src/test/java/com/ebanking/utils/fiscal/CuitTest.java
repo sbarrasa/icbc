@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CuitTest {
 
     @Test
-    void testConstructorFromStringWithSeparator() throws Exception {
+    void testConstructorOfStringWithSeparator() throws Exception {
         Cuit cuit = Cuit.of("20-12345678-9");
         assertEquals("20", cuit.getEntityTypeCode());
         assertEquals("12345678", cuit.getId());
@@ -15,7 +15,7 @@ class CuitTest {
     }
 
     @Test
-    void testConstructorFromStringWithoutSeparator() throws Exception {
+    void testConstructorOfStringWithoutSeparator() throws Exception {
         Cuit cuit = Cuit.of("20123456789");
 
         assertEquals("20", cuit.getEntityTypeCode());
@@ -24,7 +24,7 @@ class CuitTest {
     }
 
     @Test
-    void testConstructorFromComponents() throws Exception {
+    void testConstructorOfComponents() throws Exception {
         Cuit cuit = Cuit.of("20", "1234567", "9");
         assertEquals("20", cuit.getEntityTypeCode());
         assertEquals("1234567", cuit.getId());
@@ -40,6 +40,10 @@ class CuitTest {
     @Test
     void testToString() throws Exception {
         Cuit cuit = Cuit.of("20123456789");
+
+        assertEquals("20123456789", cuit.toString());
+
+        cuit.showSeparator(true);
         assertEquals("20-12345678-9", cuit.toString());
     }
 
@@ -64,7 +68,7 @@ class CuitTest {
     @Test
     void testParseWithSeparatorException() {
         Exception exception = assertThrows(Exception.class, () -> Cuit.of("20-1234567"));
-        assertEquals(Cuit.partsCountValidator.getExceptionMessage(), exception.getMessage());
+        assertEquals(CuitConverter.partsCountValidator.getExceptionMessage(), exception.getMessage());
     }
 
     @Test
@@ -72,6 +76,8 @@ class CuitTest {
         Exception exception = assertThrows(Exception.class, () -> {
             Cuit.of("201234567"); // Invalid length
         });
-        assertEquals(Cuit.sizeValidator.getExceptionMessage(), exception.getMessage());
+        assertEquals(CuitConverter.sizeValidator.getExceptionMessage(), exception.getMessage());
     }
+
+
 }

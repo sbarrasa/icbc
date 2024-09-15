@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PipelineTest {
     @Test
     void test() throws Exception {
+
         List<Pair<String, LocalDate>> authorsMap = List.of(
                 Pair.of("Sebastián Zaiper Barrasa", LocalDate.of(1974, 6, 7)),
                 Pair.of("Julio Florencio Cortazar", LocalDate.of(1914, 8, 26)),

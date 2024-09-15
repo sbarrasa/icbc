@@ -1,37 +1,26 @@
 package com.ebanking.utils.fiscal;
 
-import com.ebanking.utils.converter.Converter;
+
 import com.ebanking.utils.validator.NotNullValidator;
 import com.ebanking.utils.validator.Validator;
 
 import java.util.Objects;
 
 public abstract class Cuit {
+    public static final String DEFAULT_SEPARATOR = "-";
 
-    public static final String SEPARATOR = "-";
-
-    private static final Validator<Object> notNullValidator = new NotNullValidator()
-            .setExceptionMessage("El CUIT no puede ser nulo");
-
-    public static final Validator<String[]> partsCountValidator = Validator
-            .<String[]>build(parts -> parts.length == 3)
-            .setExceptionMessage("Formato de CUIT inválido");
-
-    public static final Validator<String> sizeValidator = Validator
-            .<String>build(cuit -> cuit.length() == 11)
-            .setExceptionMessage("El CUIT debe tener 11 dígitos");
-
+    private static final Validator<Object> idValidator = new NotNullValidator().setExceptionMessage("El ID no puede ser nulo");
+    private static final Validator<Object> dvValidator = new NotNullValidator().setExceptionMessage("El dígito verificador no puede ser nulo");
 
     public abstract String getEntityTypeCode();
     public abstract String getId();
     public abstract String getVerificationDigit();
 
-    @Override
-    public String toString() {
-        return String.join(SEPARATOR,
-                String.valueOf(getEntityTypeCode()),
-                String.valueOf(getId()),
-                String.valueOf(getVerificationDigit()));
+
+    private boolean showSeparator=false;
+
+    public EntityType getEntityType() throws Exception {
+        return EntityType.codeConverter.convert(this.getEntityTypeCode());
     }
 
     @Override
@@ -49,23 +38,17 @@ public abstract class Cuit {
         return Objects.hash(getEntityTypeCode(), getId(), getVerificationDigit());
     }
 
-    public EntityType getEntityType() throws Exception {
-        return EntityType.codeConverter.from(this.getEntityTypeCode());
-    }
 
-    public static Cuit of(String cuit) throws Exception {
-        return stringConverter.from(cuit);
+    public static Cuit of(String cuitStr) throws Exception {
+        return new CuitConverter().convert(cuitStr);
 
     }
 
-    public String toStringPlain(){
-        return getEntityTypeCode()+getId()+getVerificationDigit();
-    }
 
     public static Cuit of(String entityTypeCode, String id, String verificationDigit) throws Exception {
         EntityType.codeValidator.validate(entityTypeCode);
-        notNullValidator.validate(id);
-        notNullValidator.validate(verificationDigit);
+        idValidator.validate(id);
+        dvValidator.validate(verificationDigit);
 
         return new Cuit() {
             @Override
@@ -85,34 +68,23 @@ public abstract class Cuit {
         };
     }
 
-    private static final Converter<String, Cuit> stringConverter = new Converter<>(){
-        @Override
-        public Cuit from(String cuit) throws Exception {
-            notNullValidator.validate(cuit);
-            if (cuit.contains(SEPARATOR)) {
-                return parse(cuit, SEPARATOR);
-            } else {
-                return parse(cuit);
-            }
-        }
 
-        private Cuit parse(String cuit, String separator)  throws Exception {
-            String[] parts = cuit.split(separator);
+    @Override
+    public String toString(){
+        var separator = showSeparator() ? DEFAULT_SEPARATOR : "";
+        return String.join(separator,
+            this.getEntityTypeCode(),
+            this.getId(),
+            this.getVerificationDigit());
+    }
 
-            partsCountValidator.validate(parts);
+    public boolean showSeparator() {
+        return showSeparator;
+    }
 
-            return Cuit.of(parts[0], parts[1], parts[2]);
-        }
-
-        private Cuit parse(String cuit) throws Exception {
-            sizeValidator.validate(cuit);
-
-            return Cuit.of(cuit.substring(0, 2),
-                    cuit.substring(2, 10),
-                    cuit.substring(10)
-            );
-        }
-
-    };
+    public Cuit showSeparator(boolean separator) {
+        this.showSeparator = separator;
+        return this;
+    }
 
 }
