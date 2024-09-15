@@ -12,7 +12,7 @@ public abstract class Validator<I> implements Validable<I> {
                                                     && !string.trim().isEmpty();
 
 
-  private ExceptionHandler exceptionHandler;
+  private ExceptionHandler exceptionHandler = defaultExceptionHandler;
 
   public static Predicate<String> isDigits = string -> nonEmpty.test(string)
           && string.chars().allMatch(Character::isDigit);

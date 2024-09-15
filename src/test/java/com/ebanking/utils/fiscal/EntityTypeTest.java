@@ -48,9 +48,8 @@ class EntityTypeTest {
         assertEquals(COMPANY, EntityType.codeConverter.convert("301234"));
     }
 
-    // Test para códigos muy cortos, que deberían ser inválidos
     @Test
-    void codeTooShort() {
+    void codigoMuyCorto() {
         var code = "2";
         Exception exception = assertThrows(Exception.class, () -> EntityType.codeConverter.convert(code));
         assertEquals(EntityType.codeValidator.getExceptionMessage().formatted(code), exception.getMessage());
