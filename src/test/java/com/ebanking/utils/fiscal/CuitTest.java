@@ -68,7 +68,7 @@ class CuitTest {
     @Test
     void testParseWithSeparatorException() {
         Exception exception = assertThrows(Exception.class, () -> Cuit.of("20-1234567"));
-        assertEquals(CuitConverter.partsCountValidator.getExceptionMessage(), exception.getMessage());
+        assertEquals(CuitConverter.partsCountValidator.getExceptionBuilder().getMessage(), exception.getMessage());
     }
 
     @Test
@@ -76,7 +76,7 @@ class CuitTest {
         Exception exception = assertThrows(Exception.class, () -> {
             Cuit.of("201234567"); // Invalid length
         });
-        assertEquals(CuitConverter.sizeValidator.getExceptionMessage(), exception.getMessage());
+        assertEquals(CuitConverter.sizeValidator.getExceptionBuilder().getMessage(), exception.getMessage());
     }
 
 

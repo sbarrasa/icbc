@@ -29,13 +29,12 @@ class ValidatorTest {
   void builder() {
 
     var validator = Validator.<String>build("Hola"::equals)
-            .setExceptionMessage("%s debe ser Hola")
-            .setExceptionHandler(RuntimeException::new);
+            .setExceptionMessage("%s debe ser Hola");
 
     assertDoesNotThrow(() -> validator.validate("Hola"));
-    assertThrows(RuntimeException.class, () -> validator.validate(""));
-    var ex = assertThrows(RuntimeException.class, () -> validator.validate("Chau"));
-    assertEquals(validator.getExceptionMessage().formatted("Chau"), ex.getMessage());
+    assertThrows(Exception.class, () -> validator.validate(""));
+    var ex = assertThrows(Exception.class, () -> validator.validate("Chau"));
+    assertEquals(validator.getExceptionBuilder().getMessage(), ex.getMessage());
 
   }
 
