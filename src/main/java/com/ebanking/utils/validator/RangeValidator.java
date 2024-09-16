@@ -10,8 +10,14 @@ public class RangeValidator<T extends Comparable<T>> extends Validator<T> {
 
   public RangeValidator(Range<T> range) {
     this.range = range;
-    setExceptionMessage("El valor %s está fuera del rango "
-               .concat("[%s,%s]".formatted(range.getLowerBound() ,range.getUpperBound()))
+    setExceptionMessage("El valor %s está fuera del rango [%s,%s]");
+    setExceptionHandler((message, value) -> new Exception(
+            message.formatted(
+                    value,
+                    this.range.getMin() ,
+                    range.getMax()
+            )
+      )
     );
   }
 

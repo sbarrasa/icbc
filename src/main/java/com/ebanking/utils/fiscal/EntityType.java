@@ -31,9 +31,10 @@ public enum EntityType {
     private static final Validator<Object> notNullValidator = new NotNullValidator()
                     .setExceptionMessage(INVALID_ENTITY_CODE);
 
-    public static final Validator<String> codeValidator = new StringDigitValidator()
-                    .setMinSize(codeSize)
-                    .setExceptionMessage(INVALID_ENTITY_CODE);
+    public static final StringDigitValidator codeValidator = new StringDigitValidator(){
+        {setExceptionMessage(INVALID_ENTITY_CODE);}
+        { getSize().setMin(codeSize);}
+    };
 
     public static final EntityTypeService entityTypes = new EntityTypeService();
 }

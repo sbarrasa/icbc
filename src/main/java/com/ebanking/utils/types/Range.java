@@ -1,42 +1,52 @@
 package com.ebanking.utils.types;
 
 public class Range<T extends Comparable<T>> implements Pair<T, T> {
-  private final T lowerBound;
-  private final T upperBound;
 
-  public Range(T lowerBound, T upperBound) {
-    if (lowerBound.compareTo(upperBound) > 0) {
+  private T min;
+  private T max;
+
+  public Range(T min, T max) {
+    if (min.compareTo(max) > 0) {
       throw new IllegalArgumentException("El mínimo no debe superar al máximo");
     }
-    this.lowerBound = lowerBound;
-    this.upperBound = upperBound;
+    this.min = min;
+    this.max = max;
   }
 
-  public T getLowerBound() {
-    return lowerBound;
+  public T getMin() {
+    return min;
   }
 
-  public T getUpperBound() {
-    return upperBound;
+  public T getMax() {
+    return max;
+  }
+  public Range<T> setMin(T min) {
+    this.min = min;
+    return this;
+  }
+
+  public Range<T> setMax(T max) {
+    this.max = max;
+    return this;
   }
 
   @Override
   public T getData1() {
-    return getLowerBound();
+    return getMin();
   }
 
   @Override
   public T getData2() {
-    return getUpperBound();
+    return getMax();
   }
 
   public boolean contains(T value) {
-    return value.compareTo(lowerBound) >= 0 && value.compareTo(upperBound) <= 0;
+    return value.compareTo(min) >= 0 && value.compareTo(max) <= 0;
   }
 
   @Override
   public String toString() {
-    return String.format("Range[%s, %s]", lowerBound, upperBound);
+    return String.format("Range[%s, %s]", min, max);
   }
 }
 
