@@ -6,37 +6,41 @@ public abstract class Validator<I> implements Validable<I> {
 
   public static String defaultExceptionMessage = "value error (%s)";
 
-  public static ExceptionHandler defaultExceptionHandler = RuntimeException::new;
+  public static ExceptionHandler<?, ?> defaultExceptionHandler = (message, value) -> new RuntimeException(message.formatted(value));
 
   public static Predicate<String> nonEmpty = string -> string !=null
                                                     && !string.trim().isEmpty();
 
 
-  @SuppressWarnings("unchecked")
-  private final ExceptionBuilder<I> exceptionBuilder = (ExceptionBuilder<I>) new ExceptionBuilder<>()
-          .setMessage(defaultExceptionMessage)
-          .setExceptionHandler(defaultExceptionHandler);
-
   public static Predicate<String> isDigits = string -> nonEmpty.test(string)
           && string.chars().allMatch(Character::isDigit);
 
+  private String exceptionMessage = defaultExceptionMessage;
+  @SuppressWarnings("unchecked")
+  private ExceptionHandler<I, ?> exceptionHandler = (ExceptionHandler<I, ?>) defaultExceptionHandler;
 
   protected abstract Predicate<I> getCondition();
 
   @Override
   public void validate(I input) throws Exception {
     if (!getCondition().test(input)) {
-      throw getExceptionBuilder().build(input);
+      throw exceptionHandler.buildException(exceptionMessage, input);
     }
   }
 
 
-  public ExceptionBuilder<I> getExceptionBuilder() {
-    return this.exceptionBuilder;
+
+  public String getExceptionMessage(){
+    return exceptionMessage;
   }
 
-  public Validator<I> setExceptionMessage(String message){
-    getExceptionBuilder().setMessage(message);
+  public Validator<I> setExceptionMessage(String exceptionMessage){
+    this.exceptionMessage = exceptionMessage;
+    return this;
+  }
+
+  public Validator<I> setExceptionHandler(ExceptionHandler<I, ?> exceptionHandler){
+    this.exceptionHandler = exceptionHandler;
     return this;
   }
 

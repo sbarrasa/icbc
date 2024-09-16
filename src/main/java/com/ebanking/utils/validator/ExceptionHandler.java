@@ -1,8 +1,7 @@
 package com.ebanking.utils.validator;
 
-import java.util.function.Function;
-
 @FunctionalInterface
-public interface ExceptionHandler extends Function<String, Exception> {
+public interface ExceptionHandler<V,  E extends Exception>  {
+  E buildException(String message, V value);
 
 }

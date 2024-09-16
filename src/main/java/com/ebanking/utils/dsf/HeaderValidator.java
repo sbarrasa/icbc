@@ -9,11 +9,13 @@ public class HeaderValidator extends Validator<Header> {
   public static String HEADER_ERROR_MESSAGE = "Error (%s) %s";
 
   public HeaderValidator(){
-    getExceptionBuilder().setMessage(HEADER_ERROR_MESSAGE);
-
-    getExceptionBuilder().setMessageBuilder((message, header) -> message.formatted(
-            header.getMessageCode(),
-            header.getMessageDescription()));
+    this.setExceptionMessage(HEADER_ERROR_MESSAGE);
+    this.setExceptionHandler((message, header) -> new RuntimeException(
+            message.formatted(
+                    header.getMessageCode(),
+                    header.getMessageDescription())
+            )
+    );
   }
 
   @Override

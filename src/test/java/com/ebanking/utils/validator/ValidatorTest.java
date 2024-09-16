@@ -35,7 +35,7 @@ class ValidatorTest {
     assertDoesNotThrow(() -> validator.validate("Hola"));
     assertThrows(Exception.class, () -> validator.validate(""));
     var ex = assertThrows(Exception.class, () -> validator.validate("Chau"));
-    assertEquals(validator.getExceptionBuilder().getMessage(), ex.getMessage());
+    assertEquals(validator.getExceptionMessage().formatted("Chau"), ex.getMessage());
 
   }
 
@@ -56,10 +56,11 @@ class ValidatorTest {
     assertThrows(Exception.class, () -> validator.validate(null));
 
     Validator.defaultExceptionMessage = "PRUEBA";
-    Validator.defaultExceptionHandler = RuntimeException::new;
+    Validator.defaultExceptionHandler = (message, value) -> new InputMismatchException(message.formatted(value));
+
     Validator<String> validator2 = Validator.build(value -> value.equals("Hola"));
 
-    var ex = assertThrows(RuntimeException.class, () -> validator2.validate("Mundo"));
+    var ex = assertThrows(InputMismatchException.class, () -> validator2.validate("Mundo"));
     assertEquals("PRUEBA", ex.getMessage());
 
   }
@@ -69,20 +70,10 @@ class ValidatorTest {
 
     var exceptionMessage = "Error personalizado %s";
     var validator = Validator.build(Objects::nonNull);
-    validator.getExceptionBuilder()
-        .setMessage(exceptionMessage)
-        .setExceptionHandler(InputMismatchException::new);
-    boolean flag;
-    try{
-        validator.apply(null);
-        flag = true;
-    } catch (InputMismatchException e) {
-      flag = false;
-    }
+    validator.setExceptionMessage(exceptionMessage);
 
-    assertEquals(true, flag);
-    var ex = assertThrows(RuntimeException.class, () -> validator.validate(null));
-    assertEquals(exceptionMessage.formatted(null), ex.getMessage());
+    var ex = assertThrows(Exception.class, () -> validator.validate(null));
+    assertEquals(exceptionMessage.formatted((Object) null), ex.getMessage());
 
   }
 

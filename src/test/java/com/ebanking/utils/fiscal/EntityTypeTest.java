@@ -38,7 +38,7 @@ class EntityTypeTest {
     void invalidCode() {
         var code = "abc";
         Exception exception = assertThrows(Exception.class, () -> EntityType.codeConverter.convert(code));
-        assertEquals(EntityType.codeValidator.getExceptionBuilder().getMessage().formatted(code), exception.getMessage());
+        assertEquals(EntityType.codeValidator.getExceptionMessage().formatted(code), exception.getMessage());
     }
 
     // Test para códigos más largos, verifica que solo los primeros dos dígitos sean considerados
@@ -52,7 +52,7 @@ class EntityTypeTest {
     void codigoMuyCorto() {
         var code = "2";
         Exception exception = assertThrows(Exception.class, () -> EntityType.codeConverter.convert(code));
-        assertEquals(EntityType.codeValidator.getExceptionBuilder().getMessage(), exception.getMessage());
+        assertEquals(EntityType.codeValidator.getExceptionMessage().formatted(code), exception.getMessage());
     }
 
     // Test para verificar si pasa el código de validación correcto

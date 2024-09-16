@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TxMsgAdapterTest {
+class TxMsgValidatorTest {
 
   @Test
   public void testRequestValidatorHeaderOkDataNotAssigned()  {

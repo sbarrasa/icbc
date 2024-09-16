@@ -1,7 +1,7 @@
 package com.ebanking.utils.fiscal;
 
 import com.ebanking.utils.processor.Converter;
-import com.ebanking.utils.validator.DigitValidator;
+import com.ebanking.utils.validator.StringDigitValidator;
 import com.ebanking.utils.validator.NotNullValidator;
 import com.ebanking.utils.validator.Validator;
 
@@ -31,7 +31,7 @@ public enum EntityType {
     private static final Validator<Object> notNullValidator = new NotNullValidator()
                     .setExceptionMessage(INVALID_ENTITY_CODE);
 
-    public static final Validator<String> codeValidator = new DigitValidator()
+    public static final Validator<String> codeValidator = new StringDigitValidator()
                     .setMinSize(codeSize)
                     .setExceptionMessage(INVALID_ENTITY_CODE);
 
