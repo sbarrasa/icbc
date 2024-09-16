@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class StringSizeValidatorTest {
-  static StringSizeValidator validator = new StringSizeValidator().setSize(new Range<>(2,5));
+  static StringSizeValidator validator = new StringSizeValidator(new Range<>(2,5));
 
   @Test
   void validateOk(){

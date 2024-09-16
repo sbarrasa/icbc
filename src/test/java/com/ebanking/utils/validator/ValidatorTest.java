@@ -71,7 +71,7 @@ class ValidatorTest {
     var exceptionMessage = "Error personalizado %s";
     var validator = Validator.build(Objects::nonNull);
     validator.setExceptionMessage(exceptionMessage);
-
+  
     var ex = assertThrows(Exception.class, () -> validator.validate(null));
     assertEquals(exceptionMessage.formatted((Object) null), ex.getMessage());
 

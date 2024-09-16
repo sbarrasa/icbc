@@ -11,7 +11,7 @@ public class RangeValidatorTest {
   static RangeValidator<Integer> validator = new RangeValidator<>(new Range<>(-10, 15));
   @Test
   void validateOk(){
-    assertDoesNotThrow(() -> validator.validate(12));
+    assertDoesNotThrow(() -> validator.validate(2));
   }
 
   @Test
