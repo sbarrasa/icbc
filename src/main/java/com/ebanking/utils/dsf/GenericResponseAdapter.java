@@ -3,13 +3,20 @@ package com.ebanking.utils.dsf;
 import com.ebanking.model.Response;
 import com.ebanking.model.ResponseHeader;
 
-public class GenericResponseAdapter<D> implements GenericData<D> {
-  private final ResponseHeader header;
+import java.lang.reflect.Field;
+
+public class GenericResponseAdapter<D> implements GenericResponse<D> {
+  private final Response response;
   private final D data;
+
+  public GenericResponseAdapter(Response response) throws ReflectiveOperationException {
+    this.response = response;
+    this.data = retrieveData();
+  }
 
 
   public GenericResponseAdapter(Response response, D data) {
-    this.header = response.getHeader();
+    this.response = response;
     this.data = data;
   }
 
@@ -18,7 +25,13 @@ public class GenericResponseAdapter<D> implements GenericData<D> {
     return data;
   }
   public ResponseHeader getHeader(){
-    return header;
+    return response.getHeader();
   }
 
+  @SuppressWarnings("unchecked")
+  private D retrieveData() throws NoSuchFieldException, IllegalAccessException {
+    Field dataField = response.getClass().getDeclaredField("data");
+    dataField.setAccessible(true);
+    return (D) dataField.get(response);
+  }
 }

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ResponseValidatorTest {
 
   @Test
-  public void testRequestValidatorHeaderOkDataNotAssigned()  {
+  public void testValidateResponseOk()  {
     var validator = new ResponseValidator<>();
 
     var response = new Response();
@@ -20,7 +20,24 @@ class ResponseValidatorTest {
   }
 
   @Test
-  public void testRequestValidatorHeaderOkDataNull() {
+  public void testValidateResponseErr()  {
+    var validator = new ResponseValidator<>();
+    var response = new Response();
+    response.setHeader(new ResponseHeader());
+    response.getHeader().setResultCode("err");
+    response.getHeader().setMessageCode("BL123456");
+    response.getHeader().setMessageDescription("Se rompió todo");
+
+    Exception exception = assertThrows(Exception.class, () -> validator.validate(response));
+    assertEquals(ResponseHeaderValidator.HEADER_ERROR_MESSAGE
+            .formatted(response.getHeader().getMessageCode(),
+                response.getHeader().getMessageDescription()),
+        exception.getMessage());
+  }
+
+
+  @Test
+  public void testValidateGenericResponseWithNUllData() {
     var validator = new ResponseValidator<String>();
     var response = new Response();
     response.setHeader(new ResponseHeader());
@@ -34,7 +51,7 @@ class ResponseValidatorTest {
   }
 
   @Test
-  public void testRequestValidatorHeaderOkDataNotNull()  {
+  public void testValidateGenericResponseWithNotNullData()  {
     var validator = new ResponseValidator<String>();
     var response = new Response();
     response.setHeader(new ResponseHeader());
@@ -42,25 +59,9 @@ class ResponseValidatorTest {
 
     var responseAdapter = new GenericResponseAdapter<>(response, "Hola mundo");
 
-
     assertDoesNotThrow(() -> validator.validate(responseAdapter));
   }
 
-  @Test
-  public void testRequestValidatorHeaderErr()  {
-    var validator = new ResponseValidator<>();
-    var response = new Response();
-    response.setHeader(new ResponseHeader());
-    response.getHeader().setResultCode("err");
-    response.getHeader().setMessageCode("BL123456");
-    response.getHeader().setMessageDescription("Se rompió todo");
-
-    Exception exception = assertThrows(Exception.class, () -> validator.validate(response));
-    assertEquals(ResponseHeaderValidator.HEADER_ERROR_MESSAGE
-            .formatted(response.getHeader().getMessageCode(),
-                    response.getHeader().getMessageDescription()),
-            exception.getMessage());
-  }
 
 
 }
