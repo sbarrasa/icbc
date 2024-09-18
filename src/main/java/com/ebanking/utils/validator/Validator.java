@@ -28,8 +28,6 @@ public abstract class Validator<I> implements Validable<I> {
     }
   }
 
-
-
   public String getExceptionMessage(){
     return exceptionMessage;
   }

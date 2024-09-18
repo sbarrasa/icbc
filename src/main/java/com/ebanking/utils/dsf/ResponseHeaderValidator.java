@@ -1,14 +1,14 @@
 package com.ebanking.utils.dsf;
 
-import com.ebanking.dsf.Header;
+import com.ebanking.model.ResponseHeader;
 import com.ebanking.utils.validator.Validator;
 
 import java.util.function.Predicate;
 
-public class HeaderValidator extends Validator<Header> {
+public class ResponseHeaderValidator extends Validator<ResponseHeader> {
   public static String HEADER_ERROR_MESSAGE = "Error (%s) %s";
 
-  public HeaderValidator(){
+  public ResponseHeaderValidator(){
     this.setExceptionMessage(HEADER_ERROR_MESSAGE);
     this.setExceptionHandler((message, header) -> new RuntimeException(
             message.formatted(
@@ -19,7 +19,7 @@ public class HeaderValidator extends Validator<Header> {
   }
 
   @Override
-  protected Predicate<Header> getCondition() {
+  protected Predicate<ResponseHeader> getCondition() {
     return header -> header.getResultCode().equals("ok");
   }
 }

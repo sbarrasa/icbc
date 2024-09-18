@@ -1,32 +1,32 @@
 package com.ebanking.utils.dsf;
 
-import com.ebanking.dsf.Header;
+import com.ebanking.model.ResponseHeader;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HeaderValidatorTest {
+class ResponseHeaderValidatorTest {
   @Test
   public void testHeaderValidatorWithValidResultCode() {
-    Header header = new Header();
+    var header = new ResponseHeader();
     header.setMessageCode("MSG001");
     header.setMessageDescription("Message Description");
     header.setResultCode("ok");
     header.setTransactionId("TX12345");
 
-    HeaderValidator validator = new HeaderValidator();
+    var validator = new ResponseHeaderValidator();
     assertDoesNotThrow(() -> validator.validate(header));
   }
 
   @Test
   public void testHeaderValidatorWithInvalidResultCode() {
-    Header header = new Header();
+    var header = new ResponseHeader();
     header.setMessageCode("MSG001");
     header.setMessageDescription("Message Description");
     header.setResultCode("err");
     header.setTransactionId("TX12345");
 
-    HeaderValidator validator = new HeaderValidator();
+    var validator = new ResponseHeaderValidator();
     assertThrows(Exception.class, ()-> validator.validate(header));
   }
 }
