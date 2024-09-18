@@ -1,6 +1,6 @@
 package com.ebanking.utils.types;
 
-public class Range<T extends Comparable<T>> implements Pair<T, T> {
+public class Range<T extends Comparable<T>>  {
 
   private T min;
   private T max;
@@ -28,16 +28,6 @@ public class Range<T extends Comparable<T>> implements Pair<T, T> {
   public Range<T> setMax(T max) {
     this.max = max;
     return this;
-  }
-
-  @Override
-  public T getData1() {
-    return getMin();
-  }
-
-  @Override
-  public T getData2() {
-    return getMax();
   }
 
   public boolean contains(T value) {
