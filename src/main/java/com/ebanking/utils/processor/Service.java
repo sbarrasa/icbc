@@ -5,8 +5,8 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface Service<I, O> extends Function<I,O> {
     O get(I input) throws Exception ;
-    @Override
 
+    @Override
     default O apply(I input) {
         try {
             return get(input);

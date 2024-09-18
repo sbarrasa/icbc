@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class StringDigitValidatorTest {
+
   static StringDigitValidator validator = new StringDigitValidator();
 
   @Test

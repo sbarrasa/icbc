@@ -5,6 +5,9 @@ public class Range<T extends Comparable<T>>  {
   private T min;
   private T max;
 
+
+  public Range(){ }
+
   public Range(T min, T max) {
     if (min.compareTo(max) > 0) {
       throw new IllegalArgumentException("El mínimo no debe superar al máximo");

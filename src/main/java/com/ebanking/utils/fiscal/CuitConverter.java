@@ -14,13 +14,13 @@ public class CuitConverter implements Converter<String, Cuit> {
       .<String>build(cuit -> cuit.length() == 11)
       .setExceptionMessage("El CUIT debe tener 11 dígitos");
 
-  private static final Validator<String> notNullValidator = new NotEmptyValidator()
+  private static final Validator<String> notEmptyValidator = new NotEmptyValidator()
       .setExceptionMessage("El CUIT no puede ser nulo o vacío");
 
 
   @Override
   public Cuit convert(String cuitStr) throws Exception {
-    notNullValidator.validate(cuitStr);
+    notEmptyValidator.validate(cuitStr);
 
     if (cuitStr.contains(Cuit.DEFAULT_SEPARATOR)) {
       return parse(cuitStr, Cuit.DEFAULT_SEPARATOR);

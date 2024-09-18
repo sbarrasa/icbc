@@ -18,7 +18,7 @@ class ValidatorTest {
       @Override
       protected Predicate<Integer> getCondition() {
         return numero -> Objects.nonNull(numero)
-                && numero >= 0;
+                          && numero >= 0;
       }
     };
 
@@ -29,7 +29,7 @@ class ValidatorTest {
   @Test
   void builder() {
 
-    var validator = Validator.<String>build("Hola"::equals)
+    var validator = Validator.<String>build(value -> "Hola".equals(value))
             .setExceptionMessage("%s debe ser Hola");
 
     assertDoesNotThrow(() -> validator.validate("Hola"));
@@ -37,15 +37,6 @@ class ValidatorTest {
     var ex = assertThrows(Exception.class, () -> validator.validate("Chau"));
     assertEquals(validator.getExceptionMessage().formatted("Chau"), ex.getMessage());
 
-  }
-
-  @Test
-  void notEmpty(){
-    Validator<String> validator = Validator.build(Validator.nonEmpty);
-    assertThrows(Exception.class, () -> validator.validate(""));
-    assertThrows(Exception.class, () -> validator.validate(" "));
-    assertThrows(Exception.class, () -> validator.validate(null));
-    assertDoesNotThrow(() -> validator.validate("Hola mundo"));
   }
 
 
@@ -66,7 +57,7 @@ class ValidatorTest {
   }
 
   @Test
-  void changeExceptionHandler(){
+  void changeExceptionMessage(){
 
     var exceptionMessage = "Error personalizado %s";
     var validator = Validator.build(Objects::nonNull);
@@ -77,6 +68,18 @@ class ValidatorTest {
 
   }
 
+  @Test
+  void changeExceptionHandler(){
+
+    var exceptionMessage = "Error personalizado %s";
+    var validator = Validator.build(Objects::nonNull)
+        .setExceptionHandler((message, value)-> new RuntimeException(message.formatted(value)))
+        .setExceptionMessage(exceptionMessage);
+
+    var ex = assertThrows(RuntimeException.class, () -> validator.validate(null));
+    assertEquals(exceptionMessage.formatted((Object) null), ex.getMessage());
+
+  }
 
 
 }

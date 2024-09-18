@@ -1,4 +1,4 @@
-package com.ebanking.utils.validator;
+package com.ebanking.utils.processor;
 
 
 import java.util.function.Function;
@@ -6,6 +6,7 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface Validable<I> extends Function<I, I> {
   void validate(I value) throws Exception;
+
   @Override
   default I apply(I value) {
     safeValidate(value);

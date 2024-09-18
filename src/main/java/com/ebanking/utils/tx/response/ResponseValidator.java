@@ -1,9 +1,9 @@
-package com.ebanking.utils.dsf;
+package com.ebanking.utils.tx.response;
 
 import com.ebanking.model.Response;
 import com.ebanking.model.ResponseHeader;
 import com.ebanking.utils.validator.NotNullValidator;
-import com.ebanking.utils.validator.Validable;
+import com.ebanking.utils.processor.Validable;
 import com.ebanking.utils.validator.Validator;
 
 public class ResponseValidator<D> implements Validable<GenericResponse<D>> {

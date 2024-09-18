@@ -1,5 +1,6 @@
 package com.ebanking.utils.validator;
 
+import com.ebanking.utils.processor.Validable;
 import org.junit.jupiter.api.Test;
 
 import java.util.Objects;

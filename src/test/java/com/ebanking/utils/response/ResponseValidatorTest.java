@@ -1,7 +1,10 @@
-package com.ebanking.utils.dsf;
+package com.ebanking.utils.response;
 
 import com.ebanking.model.Response;
 import com.ebanking.model.ResponseHeader;
+import com.ebanking.utils.tx.response.GenericResponseAdapter;
+import com.ebanking.utils.tx.response.ResponseHeaderValidator;
+import com.ebanking.utils.tx.response.ResponseValidator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

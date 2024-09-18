@@ -1,4 +1,4 @@
-package com.ebanking.utils.dsf;
+package com.ebanking.utils.tx.response;
 
 import com.ebanking.model.Response;
 

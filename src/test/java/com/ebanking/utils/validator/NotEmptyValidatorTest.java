@@ -11,6 +11,7 @@ public class NotEmptyValidatorTest {
   void validateOk() {
     assertDoesNotThrow(() -> validator.validate("Hola mundo"));
   }
+
   @Test
   void validateErr() {
     assertThrows(Exception.class, () -> validator.validate(""));

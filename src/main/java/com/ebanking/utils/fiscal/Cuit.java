@@ -41,12 +41,11 @@ public abstract class Cuit {
 
     public static Cuit of(String cuitStr) throws Exception {
         return new CuitConverter().convert(cuitStr);
-
     }
 
 
     public static Cuit of(String entityTypeCode, String id, String verificationDigit) throws Exception {
-        EntityType.codeValidator.validate(entityTypeCode);
+        EntityTypeConverter.codeValidator.validate(entityTypeCode);
         idValidator.validate(id);
         dvValidator.validate(verificationDigit);
 

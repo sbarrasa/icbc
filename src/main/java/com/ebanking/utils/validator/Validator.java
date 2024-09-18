@@ -1,5 +1,7 @@
 package com.ebanking.utils.validator;
 
+import com.ebanking.utils.processor.Validable;
+
 import java.util.function.Predicate;
 
 public abstract class Validator<I> implements Validable<I> {
@@ -8,12 +10,7 @@ public abstract class Validator<I> implements Validable<I> {
 
   public static ExceptionHandler<?, ?> defaultExceptionHandler = (message, value) -> new RuntimeException(message.formatted(value));
 
-  public static Predicate<String> nonEmpty = string -> string !=null
-                                                    && !string.trim().isEmpty();
 
-
-  public static Predicate<String> isDigits = string -> nonEmpty.test(string)
-          && string.chars().allMatch(Character::isDigit);
 
   private String exceptionMessage = defaultExceptionMessage;
   @SuppressWarnings("unchecked")
@@ -24,7 +21,7 @@ public abstract class Validator<I> implements Validable<I> {
   @Override
   public void validate(I input) throws Exception {
     if (!getCondition().test(input)) {
-      throw exceptionHandler.buildException(exceptionMessage, input);
+      throw exceptionHandler.createException(exceptionMessage, input);
     }
   }
 
