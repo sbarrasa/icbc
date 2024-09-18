@@ -1,9 +1,8 @@
-package com.ebanking.utils.response;
+package com.ebanking.utils.tx.response;
 
 import com.ebanking.model.Response;
 import com.ebanking.model.ResponseHeader;
 import com.ebanking.utils.fiscal.Cuit;
-import com.ebanking.utils.tx.response.GenericResponseAdapter;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
