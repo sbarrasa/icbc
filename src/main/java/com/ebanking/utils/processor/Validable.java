@@ -1,11 +1,10 @@
 package com.ebanking.utils.processor;
 
-
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface Validable<I> extends Function<I, I> {
-  void validate(I value) throws Exception;
+public interface Validable<I, E extends Exception> extends Function<I, I> {
+  void validate(I value) throws E;
 
   @Override
   default I apply(I value) {
@@ -19,6 +18,5 @@ public interface Validable<I> extends Function<I, I> {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-
   }
 }

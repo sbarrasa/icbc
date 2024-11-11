@@ -7,38 +7,38 @@ import static org.junit.jupiter.api.Assertions.*;
 class CuitTest {
 
     @Test
-    void testConstructorOfStringWithSeparator() throws Exception {
+    void constructorOfStringWithSeparatorTest() throws Exception {
         Cuit cuit = Cuit.of("20-12345678-9");
-        assertEquals("20", cuit.getEntityTypeCode());
+        assertEquals("20", cuit.getentityCode());
         assertEquals("12345678", cuit.getId());
         assertEquals("9", cuit.getVerificationDigit());
     }
 
     @Test
-    void testConstructorOfStringWithoutSeparator() throws Exception {
+    void constructorOfStringWithoutSeparatorTest() throws Exception {
         Cuit cuit = Cuit.of("20123456789");
 
-        assertEquals("20", cuit.getEntityTypeCode());
+        assertEquals("20", cuit.getentityCode());
         assertEquals("12345678", cuit.getId());
         assertEquals("9", cuit.getVerificationDigit());
     }
 
     @Test
-    void testConstructorOfComponents() throws Exception {
+    void constructorOfComponentsTest() throws Exception {
         Cuit cuit = Cuit.of("20", "1234567", "9");
-        assertEquals("20", cuit.getEntityTypeCode());
+        assertEquals("20", cuit.getentityCode());
         assertEquals("1234567", cuit.getId());
         assertEquals("9", cuit.getVerificationDigit());
     }
 
     @Test
-    void testGetEntityType() throws Exception {
+    void getEntityTypeTest() throws Exception {
         assertEquals(EntityType.UNIPERSONAL, Cuit.of("20-1234567-8").getEntityType());
         assertEquals(EntityType.COMPANY, Cuit.of("30-1234567-8").getEntityType());
     }
 
     @Test
-    void testToString() throws Exception {
+    void toStringTest() throws Exception {
         Cuit cuit = Cuit.of("20123456789");
 
         assertEquals("20123456789", cuit.toString());
@@ -48,7 +48,7 @@ class CuitTest {
     }
 
     @Test
-    void testEquals() throws Exception {
+    void equalsTest() throws Exception {
         Cuit cuit1 = Cuit.of("20-1234567-9");
         Cuit cuit2 = Cuit.of("20-1234567-9");
         Cuit cuit3 = Cuit.of("21-1234567-9");
@@ -59,25 +59,31 @@ class CuitTest {
 
 
     @Test
-    void testHashCode() throws Exception {
+    void hashCodeTest() throws Exception {
         Cuit cuit1 = Cuit.of("20-1234567-9");
         Cuit cuit2 = Cuit.of("20-1234567-9");
         assertEquals(cuit1.hashCode(), cuit2.hashCode());
     }
 
     @Test
-    void testParseWithSeparatorException() {
+    void parseWithSeparatorExceptionTest() {
         Exception exception = assertThrows(Exception.class, () -> Cuit.of("20-1234567"));
         assertEquals(CuitConverter.partsCountValidator.getExceptionMessage(), exception.getMessage());
     }
 
     @Test
-    void testParseWithoutSeparatorException() {
-        Exception exception = assertThrows(Exception.class, () -> {
-            Cuit.of("201234567"); // Invalid length
-        });
+    void parseWithoutSeparatorExceptionTest() {
+        Exception exception = assertThrows(Exception.class, () -> Cuit.of("201234567"));
         assertEquals(CuitConverter.sizeValidator.getExceptionMessage(), exception.getMessage());
     }
 
+
+    @Test
+    void printWithoutSeparatorTest() throws Exception {
+        var cuit = Cuit.of("20-12345678-9");
+        cuit.showSeparator(false);
+
+        assertEquals("20123456789", cuit.toString());
+    }
 
 }

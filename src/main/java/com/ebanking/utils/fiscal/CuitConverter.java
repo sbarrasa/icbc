@@ -6,20 +6,23 @@ import com.ebanking.utils.validator.Validator;
 
 public class CuitConverter implements Converter<String, Cuit> {
 
-  static final Validator<String[]> partsCountValidator = Validator
-      .<String[]>build(parts -> parts.length == 3)
+  static final Validator<String[], FiscalException> partsCountValidator = Validator
+      .<String[], FiscalException>of(parts -> parts.length == 3)
+      .setExceptionHandler(FiscalException::new)
       .setExceptionMessage("Formato de CUIT inválido");
 
-  static final Validator<String> sizeValidator = Validator
-      .<String>build(cuit -> cuit.length() == 11)
+  static final Validator<String, FiscalException> sizeValidator = Validator
+      .<String, FiscalException>of(cuit -> cuit.length() == 11)
+      .setExceptionHandler(FiscalException::new)
       .setExceptionMessage("El CUIT debe tener 11 dígitos");
 
-  private static final Validator<String> notEmptyValidator = new NotEmptyValidator()
-      .setExceptionMessage("El CUIT no puede ser nulo o vacío");
+  static final Validator<String, FiscalException> notEmptyValidator = new NotEmptyValidator<FiscalException>()
+        .setExceptionHandler(FiscalException::new)
+        .setExceptionMessage("El CUIT no puede ser nulo o vacío");
 
 
   @Override
-  public Cuit convert(String cuitStr) throws Exception {
+  public Cuit convert(String cuitStr) throws FiscalException {
     notEmptyValidator.validate(cuitStr);
 
     if (cuitStr.contains(Cuit.DEFAULT_SEPARATOR)) {
@@ -29,7 +32,7 @@ public class CuitConverter implements Converter<String, Cuit> {
     }
   }
 
-  private Cuit parse(String cuitStr, String separator) throws Exception {
+  private Cuit parse(String cuitStr, String separator) throws FiscalException {
     String[] parts = cuitStr.split(separator);
     partsCountValidator.validate(parts);
     return Cuit.of(
@@ -39,7 +42,7 @@ public class CuitConverter implements Converter<String, Cuit> {
         ).showSeparator(true);
   }
 
-  private Cuit parse(String cuitStr) throws Exception {
+  private Cuit parse(String cuitStr) throws FiscalException {
     sizeValidator.validate(cuitStr);
     return Cuit.of(
         cuitStr.substring(0, 2),

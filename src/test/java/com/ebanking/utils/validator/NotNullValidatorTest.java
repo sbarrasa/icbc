@@ -6,13 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class NotNullValidatorTest {
-  static NotNullValidator validator = new NotNullValidator();
+  static NotNullValidator<?> validator = new NotNullValidator<>();
   @Test
-  void validateOk() {
+  void validateOkTest() {
     assertDoesNotThrow(() -> validator.validate("Hola mundo"));
   }
   @Test
-  void validateErr() {
+  void validateErrTest() {
     assertThrows(Exception.class, () -> validator.validate(null));
   }
 }

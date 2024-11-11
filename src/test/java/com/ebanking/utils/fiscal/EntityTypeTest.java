@@ -9,55 +9,50 @@ import static org.junit.jupiter.api.Assertions.*;
 class EntityTypeTest {
     // Test de conversión básica
     @Test
-    void codeToEntityType() throws Exception {
+    void codeToEntityTypeTest() throws Exception {
         assertEquals(UNIPERSONAL, EntityType.codeConverter.convert("20"));
         assertEquals(COMPANY, EntityType.codeConverter.convert("30"));
     }
 
     // Test para código no válido
     @Test
-    void codeNotMapped()  {
+    void codeNotMappedTest()  {
         assertThrows(Exception.class, () ->  EntityType.codeConverter.convert("10"));
     }
 
     // Test para verificar otros códigos cercanos en el mapa
     @Test
-    void codeToEntityTypeBoundaries() throws Exception {
+    void codeToEntityTypeBoundariesTest() throws Exception {
         assertEquals(UNIPERSONAL, EntityType.codeConverter.convert("27"));
         assertEquals(COMPANY, EntityType.codeConverter.convert("50"));
     }
 
-    // Test para verificar código fuera del rango (fuera del mapa)
     @Test
-    void codeToEntityTypeOutOfRange()  {
+    void codeToEntityTypeOutOfRangeTest()  {
         assertThrows(Exception.class, () ->  EntityType.codeConverter.convert("1101"));
     }
 
-    // Test para verificar que el validador detecta códigos no numéricos
     @Test
-    void invalidCode() {
+    void invalidCodeTest() {
         var code = "abc";
-        Exception exception = assertThrows(Exception.class, () -> EntityType.codeConverter.convert(code));
-        assertEquals(EntityTypeConverter.codeValidator.getExceptionMessage().formatted(code), exception.getMessage());
+        assertThrows(FiscalException.class, () -> EntityType.codeConverter.convert(code));
     }
 
-    // Test para códigos más largos, verifica que solo los primeros dos dígitos sean considerados
     @Test
-    void codeWithExtraDigits() throws Exception {
+    void codeWithExtraDigitsTest() throws Exception {
         assertEquals(UNIPERSONAL, EntityType.codeConverter.convert("201234"));
         assertEquals(COMPANY, EntityType.codeConverter.convert("301234"));
     }
 
     @Test
-    void codigoMuyCorto() {
+    void codigoMuyCortoTest() {
         var code = "2";
-        Exception exception = assertThrows(Exception.class, () -> EntityType.codeConverter.convert(code));
-        assertEquals(EntityTypeConverter.codeValidator.getExceptionMessage().formatted(code), exception.getMessage());
-    }
+        assertThrows(FiscalException.class, () -> EntityType.codeConverter.convert(code));
+     }
 
     // Test para verificar si pasa el código de validación correcto
     @Test
-    void validCodeWithLeadingZeros() throws Exception {
+    void validCodeWithLeadingZerosTest() throws Exception {
         assertEquals(UNIPERSONAL, EntityType.codeConverter.convert("200"));
         assertEquals(COMPANY, EntityType.codeConverter.convert("300"));
     }

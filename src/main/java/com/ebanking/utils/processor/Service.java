@@ -1,18 +1,8 @@
 package com.ebanking.utils.processor;
 
-import java.util.function.Function;
-
-@FunctionalInterface
-public interface Service<I, O> extends Function<I,O> {
-    O get(I input) throws Exception ;
-
-    @Override
-    default O apply(I input) {
-        try {
-            return get(input);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+public interface Service<I, O> extends GetService<I,O>, SaveService<I,O> {
+  @Override
+  default O apply(I input) {
+    return GetService.super.apply(input);
+  }
 }

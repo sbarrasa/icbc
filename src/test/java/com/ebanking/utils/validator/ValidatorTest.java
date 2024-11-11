@@ -12,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class ValidatorTest {
 
   @Test
-  void abstractCreate() {
+  void abstractCreateTest() {
 
-    Validator<Integer> naturales = new Validator<>() {
+    Validator<Integer, Exception> naturales = new Validator<>() {
       @Override
       protected Predicate<Integer> getCondition() {
         return numero -> Objects.nonNull(numero)
@@ -27,9 +27,9 @@ class ValidatorTest {
   }
 
   @Test
-  void builder() {
+  void builderTest() {
 
-    var validator = Validator.<String>build(value -> "Hola".equals(value))
+    var validator = Validator.<String, Exception>of("Hola"::equals)
             .setExceptionMessage("%s debe ser Hola");
 
     assertDoesNotThrow(() -> validator.validate("Hola"));
@@ -43,13 +43,13 @@ class ValidatorTest {
   @Test
   void changeExceptionDefault(){
 
-    var validator = Validator.build(Objects::nonNull);
+    var validator = Validator.of(Objects::nonNull);
     assertThrows(Exception.class, () -> validator.validate(null));
 
     Validator.defaultExceptionMessage = "PRUEBA";
-    Validator.defaultExceptionHandler = (message, value) -> new InputMismatchException(message.formatted(value));
+    Validator.defaultExceptionHandler = InputMismatchException::new;
 
-    Validator<String> validator2 = Validator.build(value -> value.equals("Hola"));
+    Validator<String, Exception> validator2 = Validator.of(value -> value.equals("Hola"));
 
     var ex = assertThrows(InputMismatchException.class, () -> validator2.validate("Mundo"));
     assertEquals("PRUEBA", ex.getMessage());
@@ -60,7 +60,7 @@ class ValidatorTest {
   void changeExceptionMessage(){
 
     var exceptionMessage = "Error personalizado %s";
-    var validator = Validator.build(Objects::nonNull);
+    var validator = Validator.of(Objects::nonNull);
     validator.setExceptionMessage(exceptionMessage);
   
     var ex = assertThrows(Exception.class, () -> validator.validate(null));
@@ -72,8 +72,8 @@ class ValidatorTest {
   void changeExceptionHandler(){
 
     var exceptionMessage = "Error personalizado %s";
-    var validator = Validator.build(Objects::nonNull)
-        .setExceptionHandler((message, value)-> new RuntimeException(message.formatted(value)))
+    var validator = Validator.of(Objects::nonNull)
+        .setExceptionHandler(RuntimeException::new)
         .setExceptionMessage(exceptionMessage);
 
     var ex = assertThrows(RuntimeException.class, () -> validator.validate(null));

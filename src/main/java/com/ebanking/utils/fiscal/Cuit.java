@@ -1,26 +1,34 @@
 package com.ebanking.utils.fiscal;
 
 
-import com.ebanking.utils.validator.NotNullValidator;
-import com.ebanking.utils.validator.Validator;
+import com.ebanking.utils.range.Range;
+import com.ebanking.utils.validator.StrSizeDigitValidator;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Cuit {
+public abstract class Cuit implements Serializable {
     public static final String DEFAULT_SEPARATOR = "-";
 
-    private static final Validator<Object> idValidator = new NotNullValidator().setExceptionMessage("El ID no puede ser nulo");
-    private static final Validator<Object> dvValidator = new NotNullValidator().setExceptionMessage("El dígito verificador no puede ser nulo");
+    private static final StrSizeDigitValidator<FiscalException> entityCodeValidator =
+            new StrSizeDigitValidator<>(new Range<>(2,2), FiscalException::new);
 
-    public abstract String getEntityTypeCode();
+    private static final StrSizeDigitValidator<FiscalException> idValidator =
+            new StrSizeDigitValidator<>(new Range<>(1,8), FiscalException::new);
+
+    private static final StrSizeDigitValidator<FiscalException> dvValidator =
+        new StrSizeDigitValidator<>(new Range<>(1,1), FiscalException::new);
+
+
+    public abstract String getentityCode();
     public abstract String getId();
     public abstract String getVerificationDigit();
 
 
     private boolean showSeparator=false;
 
-    public EntityType getEntityType() throws Exception {
-        return EntityType.codeConverter.convert(this.getEntityTypeCode());
+    public EntityType getEntityType() throws FiscalException {
+        return EntityType.codeConverter.convert(this.getentityCode());
     }
 
     @Override
@@ -28,31 +36,31 @@ public abstract class Cuit {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cuit cuit = (Cuit) o;
-        return getEntityTypeCode().equals(cuit.getEntityTypeCode()) &&
+        return getentityCode().equals(cuit.getentityCode()) &&
                 getId().equals(cuit.getId()) &&
                 getVerificationDigit().equals(cuit.getVerificationDigit());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getEntityTypeCode(), getId(), getVerificationDigit());
+        return Objects.hash(getentityCode(), getId(), getVerificationDigit());
     }
 
 
-    public static Cuit of(String cuitStr) throws Exception {
+    public static Cuit of(String cuitStr) throws FiscalException {
         return new CuitConverter().convert(cuitStr);
     }
 
 
-    public static Cuit of(String entityTypeCode, String id, String verificationDigit) throws Exception {
-        EntityTypeConverter.codeValidator.validate(entityTypeCode);
+    public static Cuit of(String entityCode, String id, String verificationDigit) throws FiscalException {
+        entityCodeValidator.validate(entityCode);
         idValidator.validate(id);
         dvValidator.validate(verificationDigit);
 
         return new Cuit() {
             @Override
-            public String getEntityTypeCode() {
-                return entityTypeCode;
+            public String getentityCode() {
+                return entityCode;
             }
 
             @Override
@@ -72,7 +80,7 @@ public abstract class Cuit {
     public String toString(){
         var separator = showSeparator() ? DEFAULT_SEPARATOR : "";
         return String.join(separator,
-            this.getEntityTypeCode(),
+            this.getentityCode(),
             this.getId(),
             this.getVerificationDigit());
     }
