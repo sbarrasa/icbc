@@ -11,8 +11,7 @@ public class MappedFactoryTest {
 
   @BeforeEach
   void setUp() {
-    factory
-        .register("uno", () -> 1)
+    factory.register("uno", () -> 1)
         .register("uno coma cinco", () -> 1.5)
         .register("uno longo", () -> 1L);
 
