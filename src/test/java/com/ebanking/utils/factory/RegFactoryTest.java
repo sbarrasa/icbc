@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class MappedFactoryTest {
-  private MappedFactory<String, Number> factory = new MappedFactory<>();
+public class RegFactoryTest {
+  private RegFactory<String, Number> factory = new RegFactory<>();
 
   @BeforeEach
   void setUp() {
