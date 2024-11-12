@@ -1,5 +1,5 @@
 package com.ebanking.utils.factory;
 
-public interface Factory<T> {
-  <S extends T> S create(Class<S> keyClass);
+public interface Factory<K, T> {
+  T create(K key);
 }
