@@ -1,0 +1,7 @@
+variables:
+  DC_JDK_VERSION: "JDK17"
+  ENABLE_LIB_DEPLOY: "true"
+
+include:
+  - project: 'devsecops/devsecops-templates'
+    file: '/microservice-deploy/lib-builder.yml'
