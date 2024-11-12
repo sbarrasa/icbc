@@ -7,13 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RegFactoryTest {
-  private RegFactory<String, Number> factory = new RegFactory<>();
+  private final RegFactory<String, Number> factory = new RegFactory<>();
 
   @BeforeEach
   void setUp() {
-    factory.register("uno", () -> 1)
-        .register("uno coma cinco", () -> 1.5)
-        .register("uno longo", () -> 1L);
+    factory.registry().put("uno", () -> 1);
+    factory.registry().put("uno coma cinco", () -> 1.5);
+    factory.registry().put("uno longo", () -> 1L);
 
   }
 
@@ -32,8 +32,8 @@ public class RegFactoryTest {
 
   @Test
   void testRegister() {
-    factory.register("X", () -> 666);
-    factory.unregister("uno");
+    factory.registry().put("X", () -> 666);
+    factory.registry().remove("uno");
 
     assertEquals(666, factory.create("X"));
     assertThrows(IllegalArgumentException.class, () -> factory.create("uno"));

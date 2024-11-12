@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public class RegFactory<K, T> implements Factory<K, T>, Registry<K, Supplier<? extends T>> {
+public class RegFactory<K, T> implements Factory<K, T> {
 
-  private static final String NO_CREATOR = "No hay un constructor para la clave %s";
+  private static final String NO_CREATOR = "No hay un constructor registrado para la clave %s";
   private final Map<K, Supplier<? extends T>> registry;
 
   public RegFactory() {
-    this.registry = new HashMap<>();
+    this(new HashMap<>());
   }
 
   public RegFactory(Map<K, Supplier<? extends T>> registry) {
@@ -27,17 +27,8 @@ public class RegFactory<K, T> implements Factory<K, T>, Registry<K, Supplier<? e
     return supplier.get();
   }
 
-  @Override
-  public RegFactory<K, T> register(K key, Supplier<? extends T> creator) {
-    registry.put(key, creator);
-    return this;
+  public Map<K, Supplier<? extends T>> registry(){
+    return registry;
   }
-
-  @Override
-  public Registry<K, Supplier<? extends T>> unregister(K key) {
-    registry.remove(key);
-    return this;
-  }
-
 
 }
